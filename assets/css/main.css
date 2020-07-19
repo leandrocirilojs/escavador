@@ -99,7 +99,7 @@ input, select, textarea {
 	}
 
 	body {
-		background: black;
+		background: #000;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -116,7 +116,7 @@ input, select, textarea {
 /* Type */
 
 	body, input, select, textarea {
-		color: #585858;
+		color: red;
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 16pt;
 		font-weight: 300;
@@ -151,7 +151,7 @@ input, select, textarea {
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #f2849e !important;
+			color: #ff000088 !important;
 		}
 
 	strong, b {
