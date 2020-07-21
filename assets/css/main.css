@@ -115,8 +115,12 @@ input, select, textarea {
 
 /* Type */
 
+		.title{
+			color: red;
+		}
+
 	body, input, select, textarea {
-		color: red;
+		color: white;
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 16pt;
 		font-weight: 300;
@@ -3172,8 +3176,9 @@ input, select, textarea {
 /* Footer */
 
 	#footer {
-		padding: 5em 0 6em 0 ;
-		background-color: #f6f6f6;
+		height: 5%;
+		/* padding: 1em 0 6em 0 ; */
+		background-color: rgb(68, 68, 68);
 	}
 
 		#footer > .inner {
@@ -3197,6 +3202,7 @@ input, select, textarea {
 
 			#footer > .inner section:nth-child(1) {
 				width: calc(66% - 2.5em);
+				;
 				margin-right: 2.5em;
 			}
 
@@ -3210,8 +3216,8 @@ input, select, textarea {
 				padding: 0;
 				margin-top: 5em;
 				list-style: none;
-				font-size: 0.8em;
-				color: rgba(88, 88, 88, 0.5);
+				font-size: 1em;
+				color: rgb(0, 0, 0);
 			}
 
 				#footer > .inner .copyright a {
@@ -3222,7 +3228,7 @@ input, select, textarea {
 					display: inline-block;
 					border-left: solid 1px rgba(88, 88, 88, 0.15);
 					line-height: 1;
-					padding: 0 0 0 1em;
+					padding: 0 0 0 0em;
 					margin: 0 0 0 1em;
 				}
 
