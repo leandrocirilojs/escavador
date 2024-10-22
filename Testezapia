@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Saídas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Controle de Saídas</h1>
+    <form id="form-saida">
+        <label>Data:</label>
+        <input type="date" id="data" required><br><br>
+        <label>Motorista:</label>
+        <input type="text" id="motorista" required><br><br>
+        <label>Valor Recebido:</label>
+        <input type="number" id="valor-recebido" required><br><br>
+        <label>Valor Pago:</label>
+        <input type="number" id="valor-pago" required><br><br>
+        <button id="btn-salvar">Salvar</button>
+    </form>
+    <table id="tabela-saidas">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Motorista</th>
+                <th>Valor Recebido</th>
+                <th>Valor Pago</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-saidas-body">
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+
+
+<script>
+
+  
+
+
+```
+let saidas = [];
+
+document.getElementById('btn-salvar').addEventListener('click', salvarSaida);
+
+function salvarSaida(event) {
+    event.preventDefault();
+
+    const data = document.getElementById('data').value;
+    const motorista = document.getElementById('motorista').value;
+    const valorRecebido = parseFloat(document.getElementById('valor-recebido').value);
+    const valorPago = parseFloat(document.getElementById('valor-pago').value);
+
+    const saida = {
+        data,
+        motorista,
+        valorRecebido,
+        valorPago
+    };
+
+    saidas.push(saida);
+
+    atualizarTabela();
+}
+
+function atualizarTabela() {
+    const tabelaBody = document.getElementById('tabela-saidas-body');
+    tabelaBody.innerHTML = '';
+
+    saidas.forEach(saida => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${saida.data}</td>
+            <td>${saida.motorista}</td>
+            <td>R$ ${saida.valorRecebido.toFixed(2)}</td>
+            <td>R$ ${saida.valorPago.toFixed(2)}</td>
+        `;
+        tabelaBody.appendChild(row);
+    });
+}
+
+</script>
+</body>
+</html>
