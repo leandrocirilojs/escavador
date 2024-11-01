@@ -13,6 +13,7 @@
     </header>
 
     <div class="search-bar">
+        <input type="text" id="name-input" placeholder="Digite o nome do contato">
         <input type="text" id="phone-input" placeholder="Digite o número de telefone">
         <button onclick="addContact()" class="send-button">
             <i class="fas fa-paper-plane"></i>
@@ -47,8 +48,8 @@
                 chatDiv.innerHTML = `
                     <img src="https://poloshoppingindaiatuba.com.br/assets/images/732e11da931f0081ab573c6bf3f38459.jpg" alt="User">
                     <div class="chat-info">
-                        <h2>Contato ${index + 1}</h2>
-                        <p><a href="https://wa.me/${contact}" target="_blank">Número: ${contact}</a></p>
+                        <h2>${contact.name}</h2>
+                        <p><a href="https://wa.me/${contact.phone}" target="_blank">Número: ${contact.phone}</a></p>
                     </div>
                     <span class="time">Agora</span>
                 `;
@@ -58,27 +59,30 @@
 
         // Função para adicionar um novo contato e salvar no LocalStorage
         function addContact() {
+            const nameInput = document.getElementById("name-input");
             const phoneInput = document.getElementById("phone-input");
+            const name = nameInput.value.trim();
             const phoneNumber = phoneInput.value.trim();
 
-            if (phoneNumber) {
+            if (name && phoneNumber) {
                 // Obtém os contatos existentes do LocalStorage
                 const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
                 
-                // Adiciona o novo contato na lista
-                contacts.push(phoneNumber);
+                // Adiciona o novo contato na lista como um objeto
+                contacts.push({ name: name, phone: phoneNumber });
 
                 // Salva a lista atualizada no LocalStorage
                 localStorage.setItem("contacts", JSON.stringify(contacts));
 
-                // Limpa o input e recarrega a lista de contatos
+                // Limpa os inputs e recarrega a lista de contatos
+                nameInput.value = "";
                 phoneInput.value = "";
                 loadContacts();
 
                 // Redireciona para o WhatsApp com o número adicionado
                 window.open(`https://wa.me/${phoneNumber}`, '_blank');
             } else {
-                alert("Por favor, insira um número de telefone.");
+                alert("Por favor, insira um nome e um número de telefone.");
             }
         }
 
