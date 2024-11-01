@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clone WhatsApp</title>
+    <title>DeliveryContato</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -14,28 +14,13 @@
 
     <div class="search-bar">
         <input type="text" id="phone-input" placeholder="Digite o número de telefone">
-        <button onclick="openWhatsApp()" class="send-button">
+        <button onclick="addContact()" class="send-button">
             <i class="fas fa-paper-plane"></i>
         </button>
     </div>
 
-    <main>
-        <div class="chat">
-            <img src="https://poloshoppingindaiatuba.com.br/assets/images/732e11da931f0081ab573c6bf3f38459.jpg" alt="User">
-            <div class="chat-info">
-                <h2>Contato 1</h2>
-                <p>Você: Sim e bom. Mas aí precis...</p>
-            </div>
-            <span class="time">00:43</span>
-        </div>
-        <div class="chat">
-            <img src="https://poloshoppingindaiatuba.com.br/assets/images/732e11da931f0081ab573c6bf3f38459.jpg" alt="User">
-            <div class="chat-info">
-                <h2>Contato 2</h2>
-                <p>Ok</p>
-            </div>
-            <span class="time">00:42</span>
-        </div>
+    <main id="chat-list">
+        <!-- Contatos serão carregados aqui pelo JavaScript -->
     </main>
 
     <footer>
@@ -45,6 +30,60 @@
         <div class="footer-icon">Ligações</div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Função para carregar os contatos do LocalStorage e exibi-los
+        function loadContacts() {
+            const chatList = document.getElementById("chat-list");
+            chatList.innerHTML = ""; // Limpa a lista antes de carregar
+            
+            // Obtém os contatos do LocalStorage (ou um array vazio se não houver contatos)
+            const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+
+            // Adiciona cada contato na lista de chats
+            contacts.forEach((contact, index) => {
+                const chatDiv = document.createElement("div");
+                chatDiv.classList.add("chat");
+
+                chatDiv.innerHTML = `
+                    <img src="https://poloshoppingindaiatuba.com.br/assets/images/732e11da931f0081ab573c6bf3f38459.jpg" alt="User">
+                    <div class="chat-info">
+                        <h2>Contato ${index + 1}</h2>
+                        <p>Número: ${contact}</p>
+                    </div>
+                    <span class="time">Agora</span>
+                `;
+                chatList.appendChild(chatDiv);
+            });
+        }
+
+        // Função para adicionar um novo contato e salvar no LocalStorage
+        function addContact() {
+            const phoneInput = document.getElementById("phone-input");
+            const phoneNumber = phoneInput.value.trim();
+
+            if (phoneNumber) {
+                // Obtém os contatos existentes do LocalStorage
+                const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+                
+                // Adiciona o novo contato na lista
+                contacts.push(phoneNumber);
+
+                // Salva a lista atualizada no LocalStorage
+                localStorage.setItem("contacts", JSON.stringify(contacts));
+
+                // Limpa o input e recarrega a lista de contatos
+                phoneInput.value = "";
+                loadContacts();
+
+                // Redireciona para o WhatsApp com o número adicionado
+                window.open(`https://wa.me/${phoneNumber}`, '_blank');
+            } else {
+                alert("Por favor, insira um número de telefone.");
+            }
+        }
+
+        // Carrega os contatos ao iniciar a página
+        window.onload = loadContacts;
+    </script>
 </body>
 </html>
