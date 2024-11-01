@@ -1,98 +1,51 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Saídas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        table {
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-    </style>
+    <title>Clone WhatsApp</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Controle de Saídas</h1>
-    <form id="form-saida">
-        <label>Data:</label>
-        <input type="date" id="data" required><br><br>
-        <label>Motorista:</label>
-        <input type="text" id="motorista" required><br><br>
-        <label>Valor Recebido:</label>
-        <input type="number" id="valor-recebido" required><br><br>
-        <label>Valor Pago:</label>
-        <input type="number" id="valor-pago" required><br><br>
-        <button id="btn-salvar">Salvar</button>
-    </form>
-    <table id="tabela-saidas">
-        <thead>
-            <tr>
-                <th>Data</th>
-                <th>Motorista</th>
-                <th>Valor Recebido</th>
-                <th>Valor Pago</th>
-            </tr>
-        </thead>
-        <tbody id="tabela-saidas-body">
-        </tbody>
-    </table>
+    <header>
+        <h1>WhatsApp</h1>
+        <div class="header-icons">
+            <img src="camera-icon.png" alt="Camera">
+            <img src="menu-icon.png" alt="Menu">
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Pergunte à Meta AI ou pesquise">
+    </div>
+
+    <main>
+        <div class="chat">
+            <img src="user1.jpg" alt="User">
+            <div class="chat-info">
+                <h2>4 Amigos do Alaga</h2>
+                <p>Você: Sim e bom. Mas aí precis...</p>
+            </div>
+            <span class="time">00:43</span>
+        </div>
+        <div class="chat">
+            <img src="user2.jpg" alt="User">
+            <div class="chat-info">
+                <h2>Marcos Peres</h2>
+                <p>Ok</p>
+            </div>
+            <span class="time">00:42</span>
+        </div>
+        <!-- Mais conversas podem ser adicionadas aqui -->
+    </main>
+
+    <footer>
+        <div class="footer-icon active">Conversas</div>
+        <div class="footer-icon">Atualizações</div>
+        <div class="footer-icon">Comunidades</div>
+        <div class="footer-icon">Ligações</div>
+    </footer>
 
     <script src="script.js"></script>
-
-
-<script>
-
-  
-
-
-```
-let saidas = [];
-
-document.getElementById('btn-salvar').addEventListener('click', salvarSaida);
-
-function salvarSaida(event) {
-    event.preventDefault();
-
-    const data = document.getElementById('data').value;
-    const motorista = document.getElementById('motorista').value;
-    const valorRecebido = parseFloat(document.getElementById('valor-recebido').value);
-    const valorPago = parseFloat(document.getElementById('valor-pago').value);
-
-    const saida = {
-        data,
-        motorista,
-        valorRecebido,
-        valorPago
-    };
-
-    saidas.push(saida);
-
-    atualizarTabela();
-}
-
-function atualizarTabela() {
-    const tabelaBody = document.getElementById('tabela-saidas-body');
-    tabelaBody.innerHTML = '';
-
-    saidas.forEach(saida => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${saida.data}</td>
-            <td>${saida.motorista}</td>
-            <td>R$ ${saida.valorRecebido.toFixed(2)}</td>
-            <td>R$ ${saida.valorPago.toFixed(2)}</td>
-        `;
-        tabelaBody.appendChild(row);
-    });
-}
-
-</script>
 </body>
 </html>
