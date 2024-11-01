@@ -12,7 +12,7 @@ body {
 
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 10px;
     background-color: #25D366;
@@ -23,23 +23,38 @@ header h1 {
     font-size: 1.5rem;
 }
 
-.header-icons img {
-    width: 24px;
-    margin-left: 10px;
-}
-
 .search-bar {
+    display: flex;
     padding: 10px;
     background-color: #f1f1f1;
-    display: flex;
+    align-items: center;
     justify-content: center;
 }
 
 .search-bar input {
-    width: 90%;
+    width: 85%;
     padding: 8px;
     border-radius: 20px;
     border: 1px solid #ccc;
+}
+
+.send-button {
+    background-color: #25D366;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.send-button:hover {
+    background-color: #20b558;
 }
 
 main {
