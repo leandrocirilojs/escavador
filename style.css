@@ -39,6 +39,7 @@ header h1 {
     width: 85%;
     padding: 12px;
     border-radius: 20px;
+    border: none;
     
     background-color: #f1f1f1;
 }
