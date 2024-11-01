@@ -1,4 +1,4 @@
-<script>
+
         // Função para carregar os contatos do LocalStorage e exibi-los como links
         function loadContacts() {
             const chatList = document.getElementById("chat-list");
@@ -52,4 +52,4 @@
 
         // Carrega os contatos ao iniciar a página
         window.onload = loadContacts;
-    </script>
+    
