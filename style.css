@@ -10,6 +10,10 @@ body {
     color: #000;
 }
 
+a{
+  text-decoration: none;
+}
+
 header {
     display: flex;
     justify-content: center;
