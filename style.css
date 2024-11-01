@@ -26,16 +26,17 @@ header h1 {
 .search-bar {
     display: flex;
     padding: 10px;
-    background-color: #f1f1f1;
+    background-color: #fff;
     align-items: center;
     justify-content: center;
 }
 
 .search-bar input {
     width: 85%;
-    padding: 8px;
+    padding: 12px;
     border-radius: 20px;
-    border: 1px solid #ccc;
+    
+    background-color: #f1f1f1;
 }
 
 .send-button {
