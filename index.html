@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,592 +22,149 @@
     --text-soft: #5A6A7A;
     --white: #FFFFFF;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--sand);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
   .material-icons-round { font-size: 20px; line-height: 1; vertical-align: middle; }
   .nav-icon .material-icons-round { font-size: 22px; }
   .btn-sm .material-icons-round { font-size: 16px; }
   .imovel-img .material-icons-round { font-size: 56px; opacity: 0.55; color: white; }
 
-  /* ─── WAVE BACKGROUND ─── */
-  .wave-bg {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 320px;
-    background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean) 50%, var(--ocean-light) 100%);
-    z-index: 0;
-    overflow: hidden;
-  }
-  .wave-bg::after {
-    content: '';
-    position: absolute;
-    bottom: -2px; left: 0; right: 0;
-    height: 80px;
-    background: var(--sand);
-    clip-path: ellipse(55% 100% at 50% 100%);
-  }
-  .wave-shimmer {
-    position: absolute;
-    width: 200%;
-    height: 100%;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      rgba(255,255,255,0.03) 40px,
-      transparent 80px
-    );
-    animation: shimmer 8s linear infinite;
-  }
+  /* WAVE */
+  .wave-bg { position: fixed; top: 0; left: 0; right: 0; height: 320px; background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean) 50%, var(--ocean-light) 100%); z-index: 0; overflow: hidden; }
+  .wave-bg::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 80px; background: var(--sand); clip-path: ellipse(55% 100% at 50% 100%); }
+  .wave-shimmer { position: absolute; width: 200%; height: 100%; background: repeating-linear-gradient(90deg, transparent 0px, rgba(255,255,255,0.03) 40px, transparent 80px); animation: shimmer 8s linear infinite; }
   @keyframes shimmer { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* ─── LAYOUT ─── */
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-  }
+  /* LAYOUT */
+  .container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 20px 80px; }
 
-  /* ─── HEADER ─── */
-  header {
-    padding: 52px 0 28px;
-    text-align: center;
-    color: var(--white);
-  }
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .logo span {
-    font-style: italic;
-    color: var(--coral-light);
-  }
-  .tagline {
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    opacity: 0.75;
-    margin-top: 6px;
-  }
+  /* HEADER */
+  header { padding: 52px 0 28px; text-align: center; color: var(--white); }
+  .logo { font-family: 'Playfair Display', serif; font-size: 38px; letter-spacing: -1px; line-height: 1; }
+  .logo span { font-style: italic; color: var(--coral-light); }
+  .tagline { font-size: 13px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; opacity: 0.75; margin-top: 6px; }
 
-  /* ─── NAV TABS ─── */
-  .nav-tabs {
-    display: flex;
-    background: var(--white);
-    border-radius: 16px;
-    padding: 4px;
-    margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(27,108,168,0.12);
-  }
-  .nav-tab {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: transparent;
-    border-radius: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-soft);
-    cursor: pointer;
-    transition: all 0.25s;
-  }
-  .nav-tab.active {
-    background: var(--ocean);
-    color: var(--white);
-    box-shadow: 0 3px 10px rgba(27,108,168,0.3);
-  }
-
-  /* ─── SCREENS ─── */
+  /* SCREENS */
   .screen { display: none; animation: fadeUp 0.35s ease; }
   .screen.active { display: block; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ─── CARDS ─── */
-  .card {
-    background: var(--white);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 24px rgba(27,108,168,0.08);
-  }
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    margin-bottom: 18px;
-    color: var(--text);
-  }
+  /* CARD */
+  .card { background: var(--white); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 24px rgba(27,108,168,0.08); }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 18px; color: var(--text); }
 
-  /* ─── FORM ELEMENTS ─── */
+  /* FORM */
   .field { margin-bottom: 16px; }
-  .field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-soft);
-    margin-bottom: 6px;
-  }
-  .field input, .field select, .field textarea {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1.5px solid var(--sand-dark);
-    border-radius: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    background: var(--foam);
-    transition: border-color 0.2s;
-    outline: none;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--ocean-light);
-    background: var(--white);
-  }
+  .field label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--text-soft); margin-bottom: 6px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 12px 16px; border: 1.5px solid var(--sand-dark); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); background: var(--foam); transition: border-color 0.2s; outline: none; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ocean-light); background: var(--white); }
   .field textarea { resize: none; height: 80px; }
 
-  /* ─── BUTTONS ─── */
-  .btn-primary {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--ocean), var(--ocean-deep));
-    color: var(--white);
-    border: none;
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px rgba(27,108,168,0.35);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(27,108,168,0.4); }
-  .btn-primary:active { transform: translateY(0); }
-
-  .btn-coral {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--coral), #C85A30);
-    color: var(--white);
-    border: none;
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px rgba(232,113,74,0.35);
-  }
-  .btn-coral:hover { transform: translateY(-2px); }
-
-  .btn-ghost {
-    width: 100%;
-    padding: 13px;
-    background: transparent;
-    color: var(--ocean);
-    border: 1.5px solid var(--ocean-light);
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 10px;
-  }
+  /* BUTTONS */
+  .btn-primary { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--ocean), var(--ocean-deep)); color: var(--white); border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 16px rgba(27,108,168,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-ghost { width: 100%; padding: 13px; background: transparent; color: var(--ocean); border: 1.5px solid var(--ocean-light); border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .btn-ghost:hover { background: var(--foam); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: var(--text-soft); font-size: 13px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--sand-dark); }
 
-  /* ─── DIVIDER ─── */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 18px 0;
-    color: var(--text-soft);
-    font-size: 13px;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--sand-dark);
-  }
+  /* LOGIN */
+  .login-hero { text-align: center; padding: 10px 0 24px; }
+  .login-hero .icon { font-size: 52px; margin-bottom: 8px; display: block; }
+  .login-hero p { color: var(--text-soft); font-size: 14px; line-height: 1.6; }
+  .forgot { text-align: right; font-size: 13px; color: var(--ocean); cursor: pointer; margin-top: -8px; margin-bottom: 16px; }
 
-  /* ─── LOGIN SCREEN ─── */
-  .login-hero {
-    text-align: center;
-    padding: 10px 0 24px;
-  }
-  .login-hero .icon {
-    font-size: 52px;
-    margin-bottom: 8px;
-    display: block;
-  }
-  .login-hero p {
-    color: var(--text-soft);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .forgot {
-    text-align: right;
-    font-size: 13px;
-    color: var(--ocean);
-    cursor: pointer;
-    margin-top: -8px;
-    margin-bottom: 16px;
-  }
-
-  /* ─── DASHBOARD ─── */
-  .greeting {
-    margin-bottom: 20px;
-  }
-  .greeting h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--text);
-  }
+  /* DASHBOARD */
+  .greeting { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .greeting h2 { font-family: 'Playfair Display', serif; font-size: 22px; }
   .greeting p { color: var(--text-soft); font-size: 14px; margin-top: 2px; }
+  .btn-logout { background: none; border: none; cursor: pointer; color: var(--text-soft); padding: 4px; }
 
-  .stats-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-  .stat-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 3px 16px rgba(27,108,168,0.08);
-  }
-  .stat-card .stat-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-soft);
-    margin-bottom: 6px;
-  }
-  .stat-card .stat-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--ocean);
-    line-height: 1;
-  }
-  .stat-card .stat-sub {
-    font-size: 12px;
-    color: var(--text-soft);
-    margin-top: 4px;
-  }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat-card { background: var(--white); border-radius: 16px; padding: 18px; box-shadow: 0 3px 16px rgba(27,108,168,0.08); }
+  .stat-card .stat-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; color: var(--text-soft); margin-bottom: 6px; }
+  .stat-card .stat-value { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--ocean); line-height: 1; }
+  .stat-card .stat-sub { font-size: 12px; color: var(--text-soft); margin-top: 4px; }
   .stat-card.highlight { background: linear-gradient(135deg, var(--ocean), var(--ocean-deep)); }
   .stat-card.highlight .stat-label { color: rgba(255,255,255,0.7); }
   .stat-card.highlight .stat-value { color: var(--white); }
   .stat-card.highlight .stat-sub { color: rgba(255,255,255,0.6); }
 
-  /* ─── IMOVEL CARD ─── */
-  .imovel-card {
-    background: var(--white);
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 20px rgba(27,108,168,0.08);
-  }
-  .imovel-img {
-    height: 160px;
-    background: linear-gradient(160deg, var(--ocean-light), var(--ocean-deep));
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-  }
-  .imovel-img .badge {
-    position: absolute;
-    top: 12px; right: 12px;
-    background: var(--seaweed);
-    color: var(--white);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-  }
-  .imovel-img .badge.ocupado {
-    background: var(--coral);
-  }
+  /* IMOVEL CARD */
+  .imovel-card { background: var(--white); border-radius: 20px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(27,108,168,0.08); }
+  .imovel-img { height: 140px; background: linear-gradient(160deg, var(--ocean-light), var(--ocean-deep)); position: relative; display: flex; align-items: center; justify-content: center; }
+  .imovel-img.casa { background: linear-gradient(160deg, #2D6A4F, #1B4332); }
+  .badge { position: absolute; top: 12px; right: 12px; background: var(--seaweed); color: var(--white); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; }
+  .badge.ocupado { background: var(--coral); }
   .imovel-body { padding: 18px; }
-  .imovel-body h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    margin-bottom: 4px;
-  }
-  .imovel-body .location {
-    font-size: 13px;
-    color: var(--text-soft);
-    margin-bottom: 14px;
-  }
-  .imovel-actions {
-    display: flex;
-    gap: 10px;
-  }
-  .btn-sm {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-  }
+  .imovel-body h3 { font-family: 'Playfair Display', serif; font-size: 17px; margin-bottom: 4px; }
+  .imovel-body .location { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; display: flex; align-items: center; gap: 4px; }
+  .imovel-actions { display: flex; gap: 10px; }
+  .btn-sm { flex: 1; padding: 10px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
   .btn-sm.ocean { background: var(--ocean); color: var(--white); }
   .btn-sm.outline { background: transparent; border: 1.5px solid var(--sand-dark); color: var(--text-soft); }
   .btn-sm:hover { opacity: 0.85; }
 
-  /* ─── CALENDÁRIO ─── */
-  .calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .calendar-header h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-  }
-  .cal-nav {
-    display: flex;
-    gap: 8px;
-  }
-  .cal-nav button {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    border: 1.5px solid var(--sand-dark);
-    background: transparent;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--text-soft);
-  }
+  /* CALENDÁRIO */
+  .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .calendar-header h3 { font-family: 'Playfair Display', serif; font-size: 17px; }
+  .cal-nav { display: flex; gap: 8px; }
+  .cal-nav button { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--sand-dark); background: transparent; font-size: 14px; cursor: pointer; transition: all 0.2s; color: var(--text-soft); }
   .cal-nav button:hover { background: var(--ocean); color: var(--white); border-color: var(--ocean); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-day-name { text-align: center; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-soft); padding: 4px 0 8px; }
+  .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .cal-day:hover:not(.empty):not(.ocupado):not(.passado) { background: var(--foam); }
+  .cal-day.empty, .cal-day.passado { cursor: default; opacity: 0.35; }
+  .cal-day.ocupado { background: var(--coral); color: var(--white); font-weight: 500; cursor: pointer; }
+  .cal-day.hoje { background: var(--ocean); color: var(--white); font-weight: 500; }
+  .cal-legend { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-soft); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 
-  .cal-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-  .cal-day-name {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-soft);
-    padding: 4px 0 8px;
-  }
-  .cal-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .cal-day:hover:not(.empty):not(.ocupado) { background: var(--foam); }
-  .cal-day.empty { cursor: default; }
-  .cal-day.ocupado {
-    background: var(--coral);
-    color: var(--white);
-    font-weight: 500;
-  }
-  .cal-day.hoje {
-    background: var(--ocean);
-    color: var(--white);
-    font-weight: 500;
-  }
-  .cal-day.reservado {
-    background: var(--sand-dark);
-    color: var(--text-soft);
-    text-decoration: line-through;
-  }
+  /* LINK BOX */
+  .link-box { background: var(--foam); border: 1.5px dashed var(--ocean-light); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .link-box span { font-size: 13px; color: var(--ocean); font-weight: 500; word-break: break-all; }
+  .copy-btn { background: var(--ocean); color: var(--white); border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer; white-space: nowrap; margin-left: 10px; }
 
-  .cal-legend {
-    display: flex;
-    gap: 16px;
-    margin-top: 14px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text-soft);
-  }
-  .legend-dot {
-    width: 10px; height: 10px;
-    border-radius: 3px;
-  }
-
-  /* ─── LINK PÚBLICO ─── */
-  .link-box {
-    background: var(--foam);
-    border: 1.5px dashed var(--ocean-light);
-    border-radius: 14px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .link-box span {
-    font-size: 13px;
-    color: var(--ocean);
-    font-weight: 500;
-    word-break: break-all;
-  }
-  .copy-btn {
-    background: var(--ocean);
-    color: var(--white);
-    border: none;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-left: 10px;
-    transition: opacity 0.2s;
-  }
-  .copy-btn:hover { opacity: 0.85; }
-
-  /* ─── PÚBLICO SCREEN ─── */
-  .pub-hero {
-    background: linear-gradient(160deg, var(--ocean-deep), var(--ocean));
-    border-radius: 20px;
-    padding: 28px 24px;
-    color: var(--white);
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-  .pub-hero::before {
-    content: '🏖️';
-    position: absolute;
-    right: 20px; bottom: 10px;
-    font-size: 64px;
-    opacity: 0.25;
-  }
-  .pub-hero h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    margin-bottom: 4px;
-  }
-  .pub-hero .loc { font-size: 13px; opacity: 0.75; margin-bottom: 14px; }
+  /* PÁGINA PÚBLICA */
+  .pub-hero { background: linear-gradient(160deg, var(--ocean-deep), var(--ocean)); border-radius: 20px; padding: 28px 24px; color: var(--white); margin-bottom: 16px; position: relative; overflow: hidden; }
+  .pub-hero h2 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 4px; }
+  .pub-hero .loc { font-size: 13px; opacity: 0.75; margin-bottom: 14px; display: flex; align-items: center; gap: 4px; }
   .pub-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-  .pub-tag {
-    background: rgba(255,255,255,0.18);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-  }
-
-  .price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-    margin-bottom: 20px;
-  }
-  .price-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    color: var(--ocean);
-  }
+  .pub-tag { background: rgba(255,255,255,0.18); border-radius: 20px; padding: 4px 12px; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+  .price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 20px; }
+  .price-val { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--ocean); }
   .price-unit { font-size: 14px; color: var(--text-soft); }
+  .whatsapp-btn { width: 100%; padding: 16px; background: #25D366; color: var(--white); border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(37,211,102,0.35); transition: all 0.2s; }
+  .whatsapp-btn:hover { transform: translateY(-2px); }
 
-  .whatsapp-btn {
-    width: 100%;
-    padding: 16px;
-    background: #25D366;
-    color: var(--white);
-    border: none;
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s;
-    box-shadow: 0 4px 16px rgba(37,211,102,0.35);
-  }
-  .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(37,211,102,0.4); }
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 24px 24px 0 0; padding: 28px 24px 40px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 20px; }
+  .modal-close { background: none; border: none; cursor: pointer; color: var(--text-soft); }
 
-  /* ─── BOTTOM NAV ─── */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: var(--white);
-    display: flex;
-    justify-content: space-around;
-    padding: 12px 0 20px;
-    box-shadow: 0 -4px 24px rgba(27,108,168,0.10);
-    z-index: 100;
-  }
-  .bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    cursor: pointer;
-    transition: color 0.2s;
-    color: var(--text-soft);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 0 20px;
-    border: none;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .bottom-nav-item .nav-icon { font-size: 20px; }
+  /* BOTTOM NAV */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); display: flex; justify-content: space-around; padding: 10px 0 20px; box-shadow: 0 -4px 24px rgba(27,108,168,0.10); z-index: 100; }
+  .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; color: var(--text-soft); font-size: 11px; font-weight: 500; padding: 0 16px; border: none; background: transparent; font-family: 'DM Sans', sans-serif; transition: color 0.2s; }
   .bottom-nav-item.active { color: var(--ocean); }
 
-  /* ─── TOAST ─── */
-  .toast {
-    position: fixed;
-    bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--ocean-deep);
-    color: var(--white);
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 13px;
-    opacity: 0;
-    transition: all 0.3s;
-    z-index: 200;
-    pointer-events: none;
-    white-space: nowrap;
-  }
+  /* TOAST */
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ocean-deep); color: var(--white); padding: 10px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 300; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* LOADING */
+  .loading-spinner { text-align: center; padding: 32px; color: var(--text-soft); font-size: 14px; }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 32px 16px; color: var(--text-soft); }
+  .empty-state .material-icons-round { font-size: 48px; opacity: 0.3; margin-bottom: 12px; display: block; }
 </style>
 </head>
 <body>
@@ -619,14 +177,7 @@
     <div class="tagline">Aluguel de temporada</div>
   </header>
 
-  <!-- NAV TABS -->
-  <div class="nav-tabs" id="navTabs">
-    <button class="nav-tab active" onclick="showScreen('login')">Entrar</button>
-    <button class="nav-tab" onclick="showScreen('dashboard')">Dashboard</button>
-    <button class="nav-tab" onclick="showScreen('publico')">Página Pública</button>
-  </div>
-
-  <!-- ══ TELA LOGIN ══ -->
+  <!-- ══ LOGIN ══ -->
   <div id="screen-login" class="screen active">
     <div class="card">
       <div class="login-hero">
@@ -635,84 +186,96 @@
       </div>
       <div class="field">
         <label>E-mail</label>
-        <input type="email" placeholder="seu@email.com">
+        <input type="email" id="inputEmail" placeholder="seu@email.com">
       </div>
       <div class="field">
         <label>Senha</label>
-        <input type="password" placeholder="••••••••">
+        <input type="password" id="inputSenha" placeholder="••••••••">
       </div>
-      <div class="forgot">Esqueci minha senha</div>
-      <button class="btn-primary" onclick="showScreen('dashboard'); switchNav(1)">Entrar</button>
+      <button class="btn-primary" id="btnLogin">
+        <span class="material-icons-round">login</span> Entrar
+      </button>
       <div class="divider">ou</div>
-      <button class="btn-ghost">Criar conta gratuita</button>
+      <button class="btn-ghost" id="btnIrCadastro">
+        <span class="material-icons-round">person_add</span> Criar conta gratuita
+      </button>
     </div>
   </div>
 
-  <!-- ══ TELA DASHBOARD ══ -->
+  <!-- ══ CADASTRO ══ -->
+  <div id="screen-cadastro" class="screen">
+    <div class="card">
+      <div class="card-title">Criar conta</div>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="inputNome" placeholder="Seu nome">
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="inputEmailCad" placeholder="seu@email.com">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="inputSenhaCad" placeholder="mínimo 6 caracteres">
+      </div>
+      <button class="btn-primary" id="btnCadastrar">
+        <span class="material-icons-round">check</span> Criar conta
+      </button>
+      <button class="btn-ghost" id="btnVoltarLogin">
+        <span class="material-icons-round">arrow_back</span> Voltar ao login
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
   <div id="screen-dashboard" class="screen">
     <div class="greeting">
-      <h2>Olá, João 👋</h2>
-      <p>Temporada de verão · Santos, SP</p>
+      <div>
+        <h2 id="nomeUsuario">Olá!</h2>
+        <p>Baixada Santista</p>
+      </div>
+      <button class="btn-logout" id="btnLogout" title="Sair">
+        <span class="material-icons-round">logout</span>
+      </button>
     </div>
 
     <div class="stats-row">
       <div class="stat-card highlight">
-        <div class="stat-label">Reservas ativas</div>
-        <div class="stat-value">3</div>
-        <div class="stat-sub">este mês</div>
+        <div class="stat-label">Imóveis</div>
+        <div class="stat-value" id="statImoveis">—</div>
+        <div class="stat-sub">cadastrados</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Dias livres</div>
-        <div class="stat-value">12</div>
-        <div class="stat-sub">próximos 30 dias</div>
+        <div class="stat-label">Plano</div>
+        <div class="stat-value" style="font-size:20px">Grátis</div>
+        <div class="stat-sub">1 imóvel incluído</div>
       </div>
     </div>
 
-    <!-- Imóvel Card -->
-    <div class="imovel-card">
-      <div class="imovel-img">
-        <span class="material-icons-round">apartment</span>
-        <div class="badge">Disponível</div>
-      </div>
-      <div class="imovel-body">
-        <h3>Apto Gonzaga Vista Mar</h3>
-        <div class="location"><span class="material-icons-round" style="font-size:14px">place</span> Gonzaga, Santos · 2 quartos</div>
-        <div class="imovel-actions">
-          <button class="btn-sm ocean" onclick="showScreen('calendario'); switchNav(2)"><span class="material-icons-round">calendar_month</span> Calendário</button>
-          <button class="btn-sm outline" onclick="showScreen('publico'); switchNav(3)"><span class="material-icons-round">link</span> Link público</button>
-        </div>
+    <div id="listaImoveis">
+      <div class="loading-spinner">
+        <span class="material-icons-round" style="font-size:32px;display:block;margin-bottom:8px">hourglass_top</span>
+        Carregando...
       </div>
     </div>
 
-    <div class="imovel-card">
-      <div class="imovel-img" style="background: linear-gradient(160deg, #2D6A4F, #1B4332);">
-        <span class="material-icons-round">cottage</span>
-        <div class="badge ocupado">Ocupado</div>
-      </div>
-      <div class="imovel-body">
-        <h3>Casa Guarujá Enseada</h3>
-        <div class="location"><span class="material-icons-round" style="font-size:14px">place</span> Enseada, Guarujá · 3 quartos</div>
-        <div class="imovel-actions">
-          <button class="btn-sm ocean" onclick="showScreen('calendario'); switchNav(2)"><span class="material-icons-round">calendar_month</span> Calendário</button>
-          <button class="btn-sm outline" onclick="showScreen('publico'); switchNav(3)"><span class="material-icons-round">link</span> Link público</button>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-ghost" style="margin-top:4px"><span class="material-icons-round" style="font-size:18px">add</span> Adicionar imóvel</button>
+    <button class="btn-ghost" id="btnAbrirModal">
+      <span class="material-icons-round">add</span> Adicionar imóvel
+    </button>
   </div>
 
-  <!-- ══ TELA CALENDÁRIO ══ -->
+  <!-- ══ CALENDÁRIO ══ -->
   <div id="screen-calendario" class="screen">
     <div class="card">
       <div class="calendar-header">
-        <h3>Janeiro 2025</h3>
+        <h3 id="calTitulo">Calendário</h3>
         <div class="cal-nav">
-          <button>‹</button>
-          <button>›</button>
+          <button id="calPrev">‹</button>
+          <button id="calNext">›</button>
         </div>
       </div>
-      <div class="cal-grid">
+      <div style="text-align:center;font-size:14px;color:var(--text-soft);margin-bottom:12px" id="calMesAno"></div>
+      <div class="cal-grid" id="calGrid">
         <div class="cal-day-name">D</div>
         <div class="cal-day-name">S</div>
         <div class="cal-day-name">T</div>
@@ -720,93 +283,41 @@
         <div class="cal-day-name">Q</div>
         <div class="cal-day-name">S</div>
         <div class="cal-day-name">S</div>
-        <!-- Week 1 -->
-        <div class="cal-day empty"></div>
-        <div class="cal-day empty"></div>
-        <div class="cal-day empty"></div>
-        <div class="cal-day">1</div>
-        <div class="cal-day">2</div>
-        <div class="cal-day">3</div>
-        <div class="cal-day">4</div>
-        <!-- Week 2 -->
-        <div class="cal-day">5</div>
-        <div class="cal-day">6</div>
-        <div class="cal-day">7</div>
-        <div class="cal-day">8</div>
-        <div class="cal-day">9</div>
-        <div class="cal-day ocupado">10</div>
-        <div class="cal-day ocupado">11</div>
-        <!-- Week 3 -->
-        <div class="cal-day ocupado">12</div>
-        <div class="cal-day ocupado">13</div>
-        <div class="cal-day ocupado">14</div>
-        <div class="cal-day ocupado">15</div>
-        <div class="cal-day ocupado">16</div>
-        <div class="cal-day ocupado">17</div>
-        <div class="cal-day ocupado">18</div>
-        <!-- Week 4 -->
-        <div class="cal-day hoje">19</div>
-        <div class="cal-day">20</div>
-        <div class="cal-day">21</div>
-        <div class="cal-day">22</div>
-        <div class="cal-day">23</div>
-        <div class="cal-day reservado">24</div>
-        <div class="cal-day reservado">25</div>
-        <!-- Week 5 -->
-        <div class="cal-day reservado">26</div>
-        <div class="cal-day reservado">27</div>
-        <div class="cal-day">28</div>
-        <div class="cal-day">29</div>
-        <div class="cal-day">30</div>
-        <div class="cal-day">31</div>
-        <div class="cal-day empty"></div>
       </div>
       <div class="cal-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--coral)"></div>Ocupado</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--sand-dark)"></div>Reservado</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--coral)"></div>Bloqueado</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--ocean)"></div>Hoje</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--foam);border:1px solid var(--sand-dark)"></div>Livre</div>
       </div>
+      <p style="font-size:12px;color:var(--text-soft);margin-top:12px">Toque em uma data para bloquear ou liberar.</p>
     </div>
 
-    <!-- Link público -->
     <div class="card">
       <div class="card-title">Link de disponibilidade</div>
       <div class="link-box">
-        <span>mare.app/joao/gonzaga</span>
-        <button class="copy-btn" onclick="showToast('Link copiado!')">Copiar</button>
+        <span id="linkPublicoSpan">—</span>
+        <button class="copy-btn" id="btnCopiarLink">Copiar</button>
       </div>
-      <p style="font-size:13px; color:var(--text-soft); line-height:1.6;">Compartilhe este link no WhatsApp. O interessado vê as datas livres antes de entrar em contato.</p>
+      <p style="font-size:13px;color:var(--text-soft);line-height:1.6">Compartilhe no WhatsApp. O turista vê as datas livres antes de entrar em contato.</p>
     </div>
   </div>
 
-  <!-- ══ TELA PÚBLICA ══ -->
+  <!-- ══ PÁGINA PÚBLICA ══ -->
   <div id="screen-publico" class="screen">
-    <div class="pub-hero">
-      <h2>Apto Gonzaga Vista Mar</h2>
-      <div class="loc"><span class="material-icons-round" style="font-size:14px">place</span> Gonzaga, Santos · SP</div>
-      <div class="pub-tags">
-        <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">bed</span> 2 quartos</span>
-        <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">shower</span> 1 banheiro</span>
-        <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">pool</span> Vista mar</span>
-        <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">local_parking</span> Garagem</span>
-      </div>
+    <div class="pub-hero" id="pubHero">
+      <h2 id="pubNome">—</h2>
+      <div class="loc"><span class="material-icons-round" style="font-size:14px">place</span> <span id="pubCidade">—</span></div>
+      <div class="pub-tags" id="pubTags"></div>
     </div>
-
     <div class="card">
       <div class="price-row">
-        <span class="price-val">R$ 350</span>
+        <span class="price-val" id="pubPreco">—</span>
         <span class="price-unit">/ diária</span>
       </div>
-
-      <!-- Mini calendário público -->
       <div class="calendar-header">
         <h3>Disponibilidade</h3>
-        <div class="cal-nav">
-          <button>‹</button>
-          <button>›</button>
-        </div>
       </div>
-      <div class="cal-grid">
+      <div class="cal-grid" id="calGridPublico">
         <div class="cal-day-name">D</div>
         <div class="cal-day-name">S</div>
         <div class="cal-day-name">T</div>
@@ -814,120 +325,425 @@
         <div class="cal-day-name">Q</div>
         <div class="cal-day-name">S</div>
         <div class="cal-day-name">S</div>
-        <div class="cal-day empty"></div>
-        <div class="cal-day empty"></div>
-        <div class="cal-day empty"></div>
-        <div class="cal-day">1</div>
-        <div class="cal-day">2</div>
-        <div class="cal-day">3</div>
-        <div class="cal-day">4</div>
-        <div class="cal-day">5</div>
-        <div class="cal-day">6</div>
-        <div class="cal-day">7</div>
-        <div class="cal-day">8</div>
-        <div class="cal-day">9</div>
-        <div class="cal-day ocupado">10</div>
-        <div class="cal-day ocupado">11</div>
-        <div class="cal-day ocupado">12</div>
-        <div class="cal-day ocupado">13</div>
-        <div class="cal-day ocupado">14</div>
-        <div class="cal-day ocupado">15</div>
-        <div class="cal-day ocupado">16</div>
-        <div class="cal-day ocupado">17</div>
-        <div class="cal-day ocupado">18</div>
-        <div class="cal-day hoje">19</div>
-        <div class="cal-day">20</div>
-        <div class="cal-day">21</div>
-        <div class="cal-day">22</div>
-        <div class="cal-day">23</div>
-        <div class="cal-day">24</div>
-        <div class="cal-day">25</div>
-        <div class="cal-day">26</div>
-        <div class="cal-day">27</div>
-        <div class="cal-day">28</div>
-        <div class="cal-day">29</div>
-        <div class="cal-day">30</div>
-        <div class="cal-day">31</div>
-        <div class="cal-day empty"></div>
       </div>
       <div class="cal-legend" style="margin-bottom:20px">
         <div class="legend-item"><div class="legend-dot" style="background:var(--coral)"></div>Indisponível</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--sand)"></div>Disponível</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--foam);border:1px solid var(--sand-dark)"></div>Disponível</div>
       </div>
-
-      <button class="whatsapp-btn">
+      <button class="whatsapp-btn" id="btnWhatsapp">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Tenho interesse — falar com proprietário
       </button>
     </div>
   </div>
-
 </div>
 
 <!-- BOTTOM NAV -->
-<nav class="bottom-nav" id="bottomNav">
-  <button class="bottom-nav-item active" onclick="showScreen('login'); switchNav(0)">
-    <span class="nav-icon"><span class="material-icons-round">lock</span></span>
-    Entrar
+<nav class="bottom-nav" id="bottomNav" style="display:none">
+  <button class="bottom-nav-item" onclick="showScreen('dashboard'); switchNav(0)">
+    <span class="material-icons-round">home</span>
+    <span>Imóveis</span>
   </button>
-  <button class="bottom-nav-item" onclick="showScreen('dashboard'); switchNav(1)">
-    <span class="nav-icon"><span class="material-icons-round">home</span></span>
-    Meus Imóveis
+  <button class="bottom-nav-item" onclick="showScreen('calendario'); switchNav(1)">
+    <span class="material-icons-round">calendar_month</span>
+    <span>Calendário</span>
   </button>
-  <button class="bottom-nav-item" onclick="showScreen('calendario'); switchNav(2)">
-    <span class="nav-icon"><span class="material-icons-round">calendar_month</span></span>
-    Calendário
-  </button>
-  <button class="bottom-nav-item" onclick="showScreen('publico'); switchNav(3)">
-    <span class="nav-icon"><span class="material-icons-round">public</span></span>
-    Público
+  <button class="bottom-nav-item" onclick="showScreen('publico'); switchNav(2)">
+    <span class="material-icons-round">public</span>
+    <span>Público</span>
   </button>
 </nav>
+
+<!-- MODAL ADICIONAR IMÓVEL -->
+<div class="modal-overlay" id="modalImovel">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Novo imóvel</h3>
+      <button class="modal-close" id="btnFecharModal">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    <div class="field">
+      <label>Nome do imóvel</label>
+      <input type="text" id="modalNome" placeholder="Ex: Apto Gonzaga Vista Mar">
+    </div>
+    <div class="field">
+      <label>Cidade</label>
+      <input type="text" id="modalCidade" placeholder="Ex: Santos, Guarujá, Praia Grande...">
+    </div>
+    <div class="field">
+      <label>Tipo</label>
+      <select id="modalTipo">
+        <option value="apto">Apartamento</option>
+        <option value="casa">Casa</option>
+        <option value="studio">Studio</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Quartos</label>
+      <select id="modalQuartos">
+        <option value="1">1 quarto</option>
+        <option value="2">2 quartos</option>
+        <option value="3">3 quartos</option>
+        <option value="4">4+ quartos</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Diária (R$)</label>
+      <input type="number" id="modalPreco" placeholder="Ex: 350">
+    </div>
+    <div class="field">
+      <label>WhatsApp do proprietário</label>
+      <input type="tel" id="modalTel" placeholder="Ex: 13999990000">
+    </div>
+    <button class="btn-primary" id="btnSalvarImovel" style="margin-top:8px">
+      <span class="material-icons-round">save</span> Salvar imóvel
+    </button>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script>
-  const screens = ['login','dashboard','calendario','publico'];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import { getFirestore, collection, doc, addDoc, getDocs, getDoc, setDoc, deleteDoc, query, where }
+    from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
+  // ─── CONFIG ────────────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey: "AIzaSyDLcp4-GaFIFJJRvueJSlIZzqyB_ohM2AE",
+    authDomain: "mare-app-f4b0a.firebaseapp.com",
+    projectId: "mare-app-f4b0a",
+    storageBucket: "mare-app-f4b0a.firebasestorage.app",
+    messagingSenderId: "45784368367",
+    appId: "1:45784368367:web:e7ef7c2f5aca246b31c71a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // ─── ESTADO ────────────────────────────────────────────────────
+  let usuarioAtual    = null;
+  let imovelAtual     = null; // { id, data }
+  let datasOcupadas   = new Set(); // 'YYYY-MM-DD'
+  let mesVis          = new Date().getMonth();
+  let anoVis          = new Date().getFullYear();
+
+  // ─── UI ────────────────────────────────────────────────────────
   function showScreen(name) {
-    screens.forEach(s => {
-      document.getElementById('screen-' + s)?.classList.remove('active');
-    });
-    const el = document.getElementById('screen-' + name);
-    if (el) el.classList.add('active');
-
-    // sync nav tabs
-    const tabs = document.querySelectorAll('.nav-tab');
-    const map = { login: 0, dashboard: 1, publico: 2 };
-    tabs.forEach((t, i) => t.classList.toggle('active', i === map[name]));
+    ['login','cadastro','dashboard','calendario','publico'].forEach(s =>
+      document.getElementById('screen-' + s)?.classList.remove('active'));
+    document.getElementById('screen-' + name)?.classList.add('active');
+    const logado = ['dashboard','calendario','publico'].includes(name);
+    document.getElementById('bottomNav').style.display = logado ? 'flex' : 'none';
   }
 
-  function switchNav(index) {
-    document.querySelectorAll('.bottom-nav-item').forEach((el, i) => {
-      el.classList.toggle('active', i === index);
-    });
+  function switchNav(i) {
+    document.querySelectorAll('.bottom-nav-item').forEach((el, j) =>
+      el.classList.toggle('active', i === j));
   }
 
-  function showToast(msg) {
+  function showToast(msg, erro = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
+    t.style.background = erro ? 'var(--coral)' : 'var(--ocean-deep)';
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // Calendário interativo
-  document.querySelectorAll('.cal-day:not(.empty):not(.ocupado)').forEach(day => {
-    day.addEventListener('click', function() {
-      if (this.classList.contains('reservado')) {
-        this.classList.remove('reservado');
+  function setBtn(id, loading) {
+    const b = document.getElementById(id);
+    if (b) { b.disabled = loading; b.style.opacity = loading ? '0.6' : '1'; }
+  }
+
+  // ─── AUTH ──────────────────────────────────────────────────────
+  onAuthStateChanged(auth, async user => {
+    usuarioAtual = user;
+    if (user) {
+      await carregarDashboard();
+      showScreen('dashboard');
+      switchNav(0);
+    } else {
+      showScreen('login');
+    }
+  });
+
+  document.getElementById('btnLogin').onclick = async () => {
+    const email = document.getElementById('inputEmail').value.trim();
+    const senha = document.getElementById('inputSenha').value;
+    if (!email || !senha) { showToast('Preencha e-mail e senha', true); return; }
+    setBtn('btnLogin', true);
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+    } catch {
+      showToast('E-mail ou senha incorretos', true);
+    }
+    setBtn('btnLogin', false);
+  };
+
+  document.getElementById('btnIrCadastro').onclick = () => showScreen('cadastro');
+  document.getElementById('btnVoltarLogin').onclick = () => showScreen('login');
+
+  document.getElementById('btnCadastrar').onclick = async () => {
+    const nome  = document.getElementById('inputNome').value.trim();
+    const email = document.getElementById('inputEmailCad').value.trim();
+    const senha = document.getElementById('inputSenhaCad').value;
+    if (!nome || !email || !senha) { showToast('Preencha todos os campos', true); return; }
+    setBtn('btnCadastrar', true);
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, senha);
+      await setDoc(doc(db, 'usuarios', cred.user.uid), { nome, email, plano: 'gratis', criadoEm: new Date() });
+    } catch(e) {
+      showToast(e.code === 'auth/email-already-in-use' ? 'E-mail já cadastrado' : 'Erro ao criar conta', true);
+    }
+    setBtn('btnCadastrar', false);
+  };
+
+  document.getElementById('btnLogout').onclick = () => signOut(auth);
+
+  // ─── DASHBOARD ─────────────────────────────────────────────────
+  async function carregarDashboard() {
+    try {
+      const snap = await getDoc(doc(db, 'usuarios', usuarioAtual.uid));
+      const nome = snap.exists() ? snap.data().nome : usuarioAtual.email.split('@')[0];
+      document.getElementById('nomeUsuario').textContent = `Olá, ${nome.split(' ')[0]}`;
+    } catch { document.getElementById('nomeUsuario').textContent = 'Olá!'; }
+    await carregarImoveis();
+  }
+
+  async function carregarImoveis() {
+    const lista = document.getElementById('listaImoveis');
+    lista.innerHTML = '<div class="loading-spinner"><span class="material-icons-round" style="font-size:32px;display:block;margin-bottom:8px">hourglass_top</span>Carregando...</div>';
+    try {
+      const q    = query(collection(db, 'imoveis'), where('uid', '==', usuarioAtual.uid));
+      const snap = await getDocs(q);
+      lista.innerHTML = '';
+      if (snap.empty) {
+        lista.innerHTML = '<div class="empty-state"><span class="material-icons-round">home_work</span><p>Nenhum imóvel ainda.<br>Adicione seu primeiro imóvel abaixo.</p></div>';
+        document.getElementById('statImoveis').textContent = '0';
+        return;
+      }
+      document.getElementById('statImoveis').textContent = snap.size;
+      snap.forEach(d => lista.appendChild(criarCardImovel(d.id, d.data())));
+    } catch {
+      lista.innerHTML = '<p style="color:var(--coral);font-size:14px;padding:8px">Erro ao carregar. Verifique sua conexão.</p>';
+    }
+  }
+
+  function criarCardImovel(id, data) {
+    const div = document.createElement('div');
+    div.className = 'imovel-card';
+    const icone = data.tipo === 'casa' ? 'cottage' : (data.tipo === 'studio' ? 'meeting_room' : 'apartment');
+    const ocupado = data.status === 'ocupado';
+    div.innerHTML = `
+      <div class="imovel-img ${data.tipo === 'casa' ? 'casa' : ''}">
+        <span class="material-icons-round">${icone}</span>
+        <div class="badge ${ocupado ? 'ocupado' : ''}">${ocupado ? 'Ocupado' : 'Disponível'}</div>
+      </div>
+      <div class="imovel-body">
+        <h3>${data.nome}</h3>
+        <div class="location">
+          <span class="material-icons-round" style="font-size:14px">place</span>
+          ${data.cidade} · ${data.quartos} quarto${data.quartos > 1 ? 's' : ''}
+        </div>
+        <div class="imovel-actions">
+          <button class="btn-sm ocean" data-id="${id}" data-action="calendario">
+            <span class="material-icons-round">calendar_month</span> Calendário
+          </button>
+          <button class="btn-sm outline" data-id="${id}" data-action="publico">
+            <span class="material-icons-round">link</span> Público
+          </button>
+        </div>
+      </div>`;
+
+    div.querySelectorAll('[data-action]').forEach(btn => {
+      btn.onclick = async () => {
+        const snap = await getDoc(doc(db, 'imoveis', id));
+        imovelAtual = { id, data: snap.data() };
+        if (btn.dataset.action === 'calendario') {
+          await abrirCalendario();
+          showScreen('calendario'); switchNav(1);
+        } else {
+          await abrirPublico();
+          showScreen('publico'); switchNav(2);
+        }
+      };
+    });
+    return div;
+  }
+
+  // ─── MODAL IMÓVEL ──────────────────────────────────────────────
+  document.getElementById('btnAbrirModal').onclick  = () => document.getElementById('modalImovel').classList.add('open');
+  document.getElementById('btnFecharModal').onclick = () => document.getElementById('modalImovel').classList.remove('open');
+
+  document.getElementById('btnSalvarImovel').onclick = async () => {
+    const nome    = document.getElementById('modalNome').value.trim();
+    const cidade  = document.getElementById('modalCidade').value.trim();
+    const tipo    = document.getElementById('modalTipo').value;
+    const quartos = parseInt(document.getElementById('modalQuartos').value);
+    const preco   = parseFloat(document.getElementById('modalPreco').value) || 0;
+    const tel     = document.getElementById('modalTel').value.trim();
+    if (!nome || !cidade || !tel) { showToast('Preencha nome, cidade e WhatsApp', true); return; }
+    setBtn('btnSalvarImovel', true);
+    try {
+      await addDoc(collection(db, 'imoveis'), {
+        uid: usuarioAtual.uid, nome, cidade, tipo, quartos, preco, tel,
+        status: 'disponivel',
+        slug: nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-') + '-' + Date.now(),
+        criadoEm: new Date()
+      });
+      document.getElementById('modalImovel').classList.remove('open');
+      showToast('Imóvel adicionado!');
+      // limpa form
+      ['modalNome','modalCidade','modalPreco','modalTel'].forEach(id => document.getElementById(id).value = '');
+      await carregarImoveis();
+    } catch { showToast('Erro ao salvar imóvel', true); }
+    setBtn('btnSalvarImovel', false);
+  };
+
+  // ─── CALENDÁRIO ────────────────────────────────────────────────
+  async function abrirCalendario() {
+    if (!imovelAtual) return;
+    document.getElementById('calTitulo').textContent = imovelAtual.data.nome;
+    const slug = imovelAtual.data.slug || imovelAtual.id;
+    document.getElementById('linkPublicoSpan').textContent = `mare-app-f4b0a.web.app/publico/${slug}`;
+    await carregarDatasOcupadas();
+    renderGrid();
+  }
+
+  async function carregarDatasOcupadas() {
+    datasOcupadas = new Set();
+    try {
+      const q = query(collection(db, 'bloqueios'), where('imovelId', '==', imovelAtual.id));
+      const snap = await getDocs(q);
+      snap.forEach(d => datasOcupadas.add(d.data().data));
+    } catch {}
+  }
+
+  function renderGrid() {
+    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    document.getElementById('calMesAno').textContent = `${meses[mesVis]} ${anoVis}`;
+
+    const grid  = document.getElementById('calGrid');
+    // remove dias anteriores (mantém headers)
+    while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+    const hoje    = new Date();
+    const hojeStr = hoje.toISOString().split('T')[0];
+    const primeiro = new Date(anoVis, mesVis, 1).getDay();
+    const totalDias = new Date(anoVis, mesVis + 1, 0).getDate();
+
+    for (let i = 0; i < primeiro; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= totalDias; d++) {
+      const dateStr = `${anoVis}-${String(mesVis+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+
+      const dataObj = new Date(anoVis, mesVis, d);
+      if (dateStr === hojeStr) el.classList.add('hoje');
+      else if (dataObj < hoje) el.classList.add('passado');
+      else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
+
+      if (!el.classList.contains('passado')) {
+        el.onclick = () => toggleData(dateStr, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  async function toggleData(dateStr, el) {
+    if (!imovelAtual) return;
+    const ref = doc(db, 'bloqueios', `${imovelAtual.id}_${dateStr}`);
+    try {
+      if (datasOcupadas.has(dateStr)) {
+        await deleteDoc(ref);
+        datasOcupadas.delete(dateStr);
+        el.classList.remove('ocupado');
         showToast('Data liberada');
-      } else if (!this.classList.contains('hoje')) {
-        this.classList.add('reservado');
+      } else {
+        await setDoc(ref, { imovelId: imovelAtual.id, data: dateStr });
+        datasOcupadas.add(dateStr);
+        el.classList.add('ocupado');
+        el.classList.remove('hoje');
         showToast('Data bloqueada');
       }
-    });
-  });
+    } catch { showToast('Erro ao salvar', true); }
+  }
+
+  document.getElementById('calPrev').onclick = () => {
+    mesVis--; if (mesVis < 0) { mesVis = 11; anoVis--; }
+    renderGrid();
+  };
+  document.getElementById('calNext').onclick = () => {
+    mesVis++; if (mesVis > 11) { mesVis = 0; anoVis++; }
+    renderGrid();
+  };
+
+  document.getElementById('btnCopiarLink').onclick = () => {
+    const link = document.getElementById('linkPublicoSpan').textContent;
+    navigator.clipboard?.writeText(link).then(() => showToast('Link copiado!')).catch(() => showToast('Copie manualmente', true));
+  };
+
+  // ─── PÁGINA PÚBLICA ────────────────────────────────────────────
+  async function abrirPublico() {
+    if (!imovelAtual) return;
+    const d = imovelAtual.data;
+    document.getElementById('pubNome').textContent   = d.nome;
+    document.getElementById('pubCidade').textContent = d.cidade;
+    document.getElementById('pubPreco').textContent  = d.preco ? `R$ ${d.preco.toLocaleString('pt-BR')}` : '—';
+
+    const tags = document.getElementById('pubTags');
+    tags.innerHTML = `
+      <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">bed</span> ${d.quartos} quarto${d.quartos>1?'s':''}</span>
+      <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">${d.tipo==='casa'?'cottage':'apartment'}</span> ${d.tipo==='casa'?'Casa':d.tipo==='studio'?'Studio':'Apartamento'}</span>`;
+
+    // WhatsApp
+    document.getElementById('btnWhatsapp').onclick = () => {
+      const msg = encodeURIComponent(`Olá! Vi o imóvel "${d.nome}" no Maré e tenho interesse.`);
+      window.open(`https://wa.me/55${d.tel}?text=${msg}`, '_blank');
+    };
+
+    // Calendário público (somente leitura)
+    await carregarDatasOcupadas();
+    renderGridPublico();
+  }
+
+  function renderGridPublico() {
+    const grid = document.getElementById('calGridPublico');
+    while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+    const hoje = new Date();
+    const hojeStr = hoje.toISOString().split('T')[0];
+    const primeiro = new Date(anoVis, mesVis, 1).getDay();
+    const totalDias = new Date(anoVis, mesVis + 1, 0).getDate();
+
+    for (let i = 0; i < primeiro; i++) {
+      const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
+    }
+    for (let d = 1; d <= totalDias; d++) {
+      const dateStr = `${anoVis}-${String(mesVis+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      el.style.cursor = 'default';
+      if (dateStr === hojeStr) el.classList.add('hoje');
+      else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
+      grid.appendChild(el);
+    }
+  }
+
+  // ─── BOTTOM NAV EXTERNO ────────────────────────────────────────
+  window.showScreen = showScreen;
+  window.switchNav  = switchNav;
 </script>
 </body>
 </html>
