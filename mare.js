@@ -80,7 +80,7 @@ onAuthStateChanged(auth, async user => {
   usuarioAtual = user;
   const handled = await verificarDeepLink();
   if (handled) return;
-  if (user) { await carregarDashboard(); showScreen('dashboard'); switchNav(0); }
+  if (user) { await carregarDashboard(); initAvatarUpload(); showScreen('dashboard'); switchNav(0); }
   else showScreen('login');
 });
 
@@ -135,10 +135,63 @@ document.getElementById('btnCadastrar').onclick = async () => {
 async function carregarDashboard() {
   try {
     const snap = await getDoc(doc(db,'usuarios',usuarioAtual.uid));
-    const nome = snap.exists() ? snap.data().nome : usuarioAtual.email.split('@')[0];
+    const dados = snap.exists() ? snap.data() : {};
+    const nome = dados.nome || usuarioAtual.email.split('@')[0];
     document.getElementById('nomeUsuario').textContent = `Olá, ${nome.split(' ')[0]}`;
+    // Avatar no greeting
+    const avatarEl = document.getElementById('greetingAvatar');
+    if (avatarEl) {
+      if (dados.avatar) {
+        avatarEl.style.backgroundImage = `url(${dados.avatar})`;
+        avatarEl.style.backgroundSize = 'cover';
+        avatarEl.innerHTML = '';
+      } else {
+        avatarEl.style.backgroundImage = '';
+        avatarEl.innerHTML = `<span class="material-icons-round" style="font-size:22px;color:var(--ocean-light)">person</span>`;
+      }
+    }
   } catch { document.getElementById('nomeUsuario').textContent = 'Olá!'; }
   await carregarImoveis();
+}
+
+// Upload avatar
+function initAvatarUpload() {
+  const avatarEl = document.getElementById('greetingAvatar');
+  if (!avatarEl) return;
+  avatarEl.style.cursor = 'pointer';
+  avatarEl.title = 'Toque para trocar foto de perfil';
+  avatarEl.onclick = () => {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      if (file.size > 2*1024*1024) { showToast('Foto maior que 2MB', true); return; }
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        const img = new Image();
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          const size = 200;
+          canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const min = Math.min(img.width, img.height);
+          const sx = (img.width - min)/2, sy = (img.height - min)/2;
+          ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+          const avatar = canvas.toDataURL('image/jpeg', 0.7);
+          try {
+            await updateDoc(doc(db,'usuarios',usuarioAtual.uid), { avatar });
+            avatarEl.style.backgroundImage = `url(${avatar})`;
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.innerHTML = '';
+            showToast('Foto de perfil atualizada!');
+          } catch { showToast('Erro ao salvar foto', true); }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  };
 }
 
 async function carregarImoveis() {
@@ -341,16 +394,44 @@ function renderGrid() {
     const dataObj = new Date(anoVis, mesVis, d);
     if (dateStr===hojeStr) el.classList.add('hoje');
     else if (dataObj < hoje) el.classList.add('passado');
-    else if (isReservado(dateStr)) el.classList.add('reservado');
+    else if (isReservado(dateStr)) {
+      el.classList.add('reservado');
+      const r = reservas.find(r => (r.datas||[]).includes(dateStr));
+      if (r) el.dataset.tooltip = r.hospede;
+    }
     else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
     if (calMode==='reservar' && rangeInicio && dateStr===rangeInicio) el.classList.add('range-start');
     const naoClicavel = el.classList.contains('passado') || el.classList.contains('hoje');
     if (!naoClicavel) el.onclick = () => handleDiaClick(dateStr);
+    if (el.dataset.tooltip) {
+      el.addEventListener('mouseenter', showCalTooltip);
+      el.addEventListener('mouseleave', hideCalTooltip);
+      el.addEventListener('touchstart', showCalTooltip, {passive:true});
+      el.addEventListener('touchend', hideCalTooltip);
+    }
     grid.appendChild(el);
   }
 }
 
 function isReservado(dateStr) { return reservas.some(r => (r.datas||[]).includes(dateStr)); }
+
+// ─── TOOLTIP CALENDÁRIO ────────────────────────────────────────
+let tooltipEl = null;
+function showCalTooltip(e) {
+  const el = e.currentTarget;
+  if (!el.dataset.tooltip) return;
+  hideCalTooltip();
+  tooltipEl = document.createElement('div');
+  tooltipEl.className = 'cal-tooltip';
+  tooltipEl.textContent = el.dataset.tooltip;
+  document.body.appendChild(tooltipEl);
+  const rect = el.getBoundingClientRect();
+  tooltipEl.style.left = (rect.left + rect.width/2 - tooltipEl.offsetWidth/2) + 'px';
+  tooltipEl.style.top  = (rect.top - tooltipEl.offsetHeight - 6 + window.scrollY) + 'px';
+}
+function hideCalTooltip() {
+  if (tooltipEl) { tooltipEl.remove(); tooltipEl = null; }
+}
 
 async function handleDiaClick(dateStr) {
   if (!imovelAtual) return;
@@ -437,6 +518,29 @@ function renderListaReservas() {
   });
 }
 
+// ─── EXPORTAR RESERVAS CSV ────────────────────────────────────
+function exportarReservasCSV() {
+  if (!reservas.length) { showToast('Nenhuma reserva para exportar', true); return; }
+  const linhas = [['Hóspede','Telefone','Entrada','Saída','Noites']];
+  reservas.slice().sort((a,b) => a.inicio.localeCompare(b.inicio)).forEach(r => {
+    linhas.push([
+      r.hospede,
+      r.tel || '',
+      formatarData(r.inicio),
+      formatarData(r.fim),
+      (r.datas||[]).length
+    ]);
+  });
+  const csv = linhas.map(l => l.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `reservas-${imovelAtual?.data?.nome||'imovel'}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('CSV exportado!');
+}
+window.exportarReservasCSV = exportarReservasCSV;
+
 document.getElementById('calPrev').onclick = () => { mesVis--; if(mesVis<0){mesVis=11;anoVis--;} renderGrid(); };
 document.getElementById('calNext').onclick = () => { mesVis++; if(mesVis>11){mesVis=0;anoVis++;} renderGrid(); };
 
@@ -461,6 +565,19 @@ async function abrirPublico(mostrarVoltar=false) {
     const msg = encodeURIComponent(`Olá! Vi o imóvel "${d.nome}" no Maré e tenho interesse.`);
     window.open(`https://wa.me/55${d.tel}?text=${msg}`, '_blank');
   };
+  // Avatar do proprietário na página pública
+  try {
+    const userSnap = await getDoc(doc(db,'usuarios', imovelAtual.data.uid || ''));
+    const userData = userSnap.exists() ? userSnap.data() : {};
+    const pubOwner = document.getElementById('pubOwner');
+    if (pubOwner) {
+      const avatarHtml = userData.avatar
+        ? `<div class="pub-owner-avatar" style="background-image:url(${userData.avatar});background-size:cover"></div>`
+        : `<div class="pub-owner-avatar"><span class="material-icons-round" style="font-size:22px;color:var(--ocean-light)">person</span></div>`;
+      pubOwner.innerHTML = `${avatarHtml}<div><div class="pub-owner-name">${userData.nome||'Proprietário'}</div><div class="pub-owner-sub">Proprietário</div></div>`;
+      pubOwner.style.display = 'flex';
+    }
+  } catch {}
   // Botão voltar visível só se veio da vitrine
   document.getElementById('btnVoltarVitrine').style.display = mostrarVoltar ? 'inline-flex' : 'none';
   await carregarDadosCalendario();
