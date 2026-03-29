@@ -344,7 +344,8 @@ function renderGrid() {
     else if (isReservado(dateStr)) el.classList.add('reservado');
     else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
     if (calMode==='reservar' && rangeInicio && dateStr===rangeInicio) el.classList.add('range-start');
-    if (!el.classList.contains('passado')) el.onclick = () => handleDiaClick(dateStr);
+    const naoClicavel = el.classList.contains('passado') || el.classList.contains('hoje');
+    if (!naoClicavel) el.onclick = () => handleDiaClick(dateStr);
     grid.appendChild(el);
   }
 }
@@ -580,7 +581,7 @@ async function carregarVitrine() {
 function toDateStr(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function datasEntre(inicio, fim) {
   const datas=[], cur=new Date(inicio+'T00:00:00'), end=new Date(fim+'T00:00:00');
-  while (cur<=end) { datas.push(toDateStr(cur)); cur.setDate(cur.getDate()+1); }
+  while (cur<end) { datas.push(toDateStr(cur)); cur.setDate(cur.getDate()+1); }
   return datas;
 }
 function formatarData(str) { if(!str) return ''; const [y,m,d]=str.split('-'); return `${d}/${m}/${y}`; }
