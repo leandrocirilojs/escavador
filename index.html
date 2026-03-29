@@ -7,6 +7,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 <style>
+
+
+/* Adicionar dentro do <style> */
+.floating-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 150;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(13, 69, 112, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.floating-header .fh-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--white);
+  letter-spacing: -0.5px;
+}
+.floating-header .fh-logo span { font-style: italic; color: var(--coral-light); }
+.floating-header .fh-logout {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 10px;
+  padding: 7px 10px;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.floating-header .fh-logout:hover { background: rgba(255,255,255,0.22); }
+
+  
   :root {
     --sand: #F5EDD8; --sand-dark: #E8D9BB; --ocean: #1B6CA8; --ocean-deep: #0D4570;
     --ocean-light: #5BA3D0; --foam: #EAF4FB; --coral: #E8714A; --coral-light: #F4A07A;
@@ -166,7 +207,13 @@
 </style>
 </head>
 <body>
-
+<div class="floating-header" id="floatingHeader">
+  <div class="fh-logo">Ma<span>ré</span></div>
+  <button class="fh-logout" id="btnLogoutHeader">
+    <span class="material-icons-round" style="font-size:16px">logout</span>
+    Sair
+  </button>
+</div>
 <div class="wave-bg"><div class="wave-shimmer"></div></div>
 
 <div class="container">
@@ -399,8 +446,9 @@
     ['login','cadastro','dashboard','calendario','publico'].forEach(s =>
       document.getElementById('screen-'+s)?.classList.remove('active'));
     document.getElementById('screen-'+name)?.classList.add('active');
-    document.getElementById('bottomNav').style.display =
-      ['dashboard','calendario','publico'].includes(name) ? 'flex' : 'none';
+    const autenticado = ['dashboard','calendario','publico'].includes(name);
+document.getElementById('bottomNav').style.display = autenticado ? 'flex' : 'none';
+document.getElementById('floatingHeader').style.display = autenticado ? 'flex' : 'none';
   }
   function switchNav(i) {
     document.querySelectorAll('.bottom-nav-item').forEach((el,j) => el.classList.toggle('active', i===j));
@@ -416,6 +464,7 @@
   }
   window.showScreen = showScreen;
   window.switchNav  = switchNav;
+  document.getElementById('btnLogoutHeader').onclick = () => signOut(auth);
 
   // ─── CAL MODE ──────────────────────────────────────────────────
   window.setCalMode = function(mode) {
