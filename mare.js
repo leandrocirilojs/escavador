@@ -33,8 +33,9 @@ function showScreen(name) {
     document.getElementById('screen-'+s)?.classList.remove('active'));
   document.getElementById('screen-'+name)?.classList.add('active');
   const autenticado = ['dashboard','calendario','publico'].includes(name);
-  document.getElementById('bottomNav').style.display = autenticado ? 'flex' : 'none';
-  document.getElementById('floatingHeader').style.display = autenticado ? 'flex' : 'none';
+  const logado = !!usuarioAtual;
+  document.getElementById('bottomNav').style.display = (autenticado && logado) ? 'flex' : 'none';
+  document.getElementById('floatingHeader').style.display = (autenticado && logado) ? 'flex' : 'none';
 }
 
 function switchNav(i) {
