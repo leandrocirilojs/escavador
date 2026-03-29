@@ -364,3 +364,55 @@ header { padding: 52px 0 28px; text-align: center; color: var(--white); }
   margin-bottom: 16px; transition: background 0.2s;
 }
 .btn-voltar-vitrine:hover { background: rgba(255,255,255,0.25); }
+
+/* ── TOOLTIP CALENDÁRIO ── */
+.cal-tooltip {
+  position: absolute; z-index: 500;
+  background: var(--ocean-deep); color: var(--white);
+  font-size: 12px; font-weight: 500;
+  padding: 5px 10px; border-radius: 8px;
+  pointer-events: none; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.cal-tooltip::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--ocean-deep);
+}
+
+/* ── EXPORTAR CSV ── */
+.card-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.card-title-row .card-title { margin-bottom: 0; }
+.btn-export {
+  background: var(--foam); border: 1.5px solid var(--ocean-light);
+  color: var(--ocean); border-radius: 10px; padding: 6px 12px;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; gap: 4px;
+  transition: all 0.2s;
+}
+.btn-export:hover { background: var(--ocean); color: var(--white); border-color: var(--ocean); }
+
+/* ── AVATAR GREETING ── */
+.greeting-left { display: flex; align-items: center; gap: 12px; }
+.greeting-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--foam); border: 2px solid var(--sand-dark);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0; transition: border-color 0.2s;
+}
+.greeting-avatar:hover { border-color: var(--ocean-light); }
+
+/* ── PROPRIETÁRIO NA PÁG PÚBLICA ── */
+.pub-owner {
+  align-items: center; gap: 12px;
+  background: var(--foam); border-radius: 14px;
+  padding: 12px 16px; margin-bottom: 16px;
+}
+.pub-owner-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--sand-dark); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.pub-owner-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.pub-owner-sub  { font-size: 12px; color: var(--text-soft); margin-top: 1px; }
