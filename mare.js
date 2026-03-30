@@ -681,50 +681,66 @@ async function carregarVitrine() {
         const classeImg = d.tipo==='casa' ? 'casa' : (d.tipo==='studio' ? 'studio' : '');
         const icone = d.tipo==='casa' ? 'cottage' : (d.tipo==='studio' ? 'meeting_room' : 'apartment');
         const temFoto = d.foto
-          ? `<img src="${d.foto}" alt="${d.nome}"><div class="img-overlay"></div>`
-          : `<span class="material-icons-round" style="font-size:48px;opacity:0.5;color:white">${icone}</span>`;
+          ? `<img src="${d.foto}" alt="${d.nome}">`
+          : `<span class="material-icons-round vc-icon-placeholder">${icone}</span>`;
+        const tipo = d.tipo==='casa' ? 'Casa' : d.tipo==='studio' ? 'Studio' : 'Apartamento';
+        const preco = d.preco ? `R$ ${Number(d.preco).toLocaleString('pt-BR')}` : '—';
         const card = document.createElement('div');
         card.className = 'vitrine-card';
         card.innerHTML = `
-          <div class="vitrine-card-img ${classeImg}">${temFoto}</div>
-          <div class="vitrine-card-body">
-            <h3>${d.nome}</h3>
-            <div class="vc-loc"><span class="material-icons-round" style="font-size:14px">place</span>${d.cidade}</div>
-            <div class="vc-tags">
-              <span class="vc-tag"><span class="material-icons-round" style="font-size:13px">bed</span>${d.quartos} quarto${d.quartos>1?'s':''}</span>
-              <span class="vc-tag"><span class="material-icons-round" style="font-size:13px">${d.tipo==='casa'?'cottage':'apartment'}</span>${d.tipo==='casa'?'Casa':d.tipo==='studio'?'Studio':'Apartamento'}</span>
+          <div class="vc-img-wrap ${classeImg}">
+            ${temFoto}
+            <div class="vc-badge">Disponível</div>
+            <button class="vc-heart" data-tel="${d.tel}" data-nome="${d.nome}" title="Contatar via WhatsApp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </button>
+          </div>
+          <div class="vc-body">
+            <div class="vc-top">
+              <div class="vc-title">${d.nome}</div>
             </div>
-            <div class="vc-footer">
-              <div class="vc-preco">${d.preco ? `R$ ${Number(d.preco).toLocaleString('pt-BR')}` : '—'} <span>/ diária</span></div>
-              <div class="vc-btns">
-                <button class="btn-ver-sm" data-slug="${d.slug||d.id}">
-                  <span class="material-icons-round" style="font-size:14px">calendar_month</span> Ver
-                </button>
-                <button class="btn-wpp-sm" data-tel="${d.tel}" data-nome="${d.nome}">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  WhatsApp
-                </button>
-              </div>
+            <div class="vc-sub">${tipo} · ${d.quartos} quarto${d.quartos>1?'s':''}</div>
+            <div class="vc-cidade"><span class="material-icons-round" style="font-size:13px">place</span>${d.cidade}</div>
+            <div class="vc-price-row">
+              <span class="vc-price">${preco}</span>
+              <span class="vc-price-unit">/ diária</span>
+              <button class="vc-ver-btn" data-slug="${d.slug||d.id}">Ver disponibilidade</button>
             </div>
           </div>`;
 
-        // ── Ver imóvel SEM recarregar a página ──
-        card.querySelector('.btn-ver-sm').onclick = async () => {
-          const slug = card.querySelector('.btn-ver-sm').dataset.slug;
+        // Ver imóvel
+        card.querySelector('.vc-ver-btn').onclick = async () => {
+          const slug = card.querySelector('.vc-ver-btn').dataset.slug;
           try {
             const snap = await getDocs(query(collection(db,'imoveis'), where('slug','==',slug)));
             if (snap.empty) { showToast('Imóvel não encontrado', true); return; }
             const d2 = snap.docs[0];
             imovelAtual = { id:d2.id, data:d2.data() };
-            await abrirPublico(true); // true = mostrar botão voltar
+            await abrirPublico(true);
             showScreen('publico');
           } catch { showToast('Erro ao carregar imóvel', true); }
         };
 
-        card.querySelector('.btn-wpp-sm').onclick = () => {
-          const b = card.querySelector('.btn-wpp-sm');
+        // WhatsApp no coração
+        card.querySelector('.vc-heart').onclick = (e) => {
+          e.stopPropagation();
+          const b = card.querySelector('.vc-heart');
           const msg = encodeURIComponent(`Olá! Vi o imóvel "${b.dataset.nome}" no Maré e tenho interesse.`);
           window.open(`https://wa.me/55${b.dataset.tel}?text=${msg}`, '_blank');
+        };
+
+        // Clicar na foto também abre o imóvel
+        card.querySelector('.vc-img-wrap').onclick = async (e) => {
+          if (e.target.closest('.vc-heart')) return;
+          const slug = card.querySelector('.vc-ver-btn').dataset.slug;
+          try {
+            const snap = await getDocs(query(collection(db,'imoveis'), where('slug','==',slug)));
+            if (snap.empty) return;
+            const d2 = snap.docs[0];
+            imovelAtual = { id:d2.id, data:d2.data() };
+            await abrirPublico(true);
+            showScreen('publico');
+          } catch {}
         };
 
         grid.appendChild(card);
