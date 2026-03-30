@@ -541,8 +541,21 @@ function exportarReservasCSV() {
 }
 window.exportarReservasCSV = exportarReservasCSV;
 
-document.getElementById('calPrev').onclick = () => { mesVis--; if(mesVis<0){mesVis=11;anoVis--;} renderGrid(); };
-document.getElementById('calNext').onclick = () => { mesVis++; if(mesVis>11){mesVis=0;anoVis++;} renderGrid(); };
+function navMes(delta) {
+  mesVis += delta;
+  if (mesVis < 0) { mesVis = 11; anoVis--; }
+  if (mesVis > 11) { mesVis = 0; anoVis++; }
+  // Se estava selecionando período, cancela para evitar período entre meses
+  if (calMode === 'reservar' && rangeInicio) {
+    rangeInicio = null;
+    document.getElementById('rangeInfo').textContent = 'Mês alterado — selecione a data de entrada';
+    const btn = document.getElementById('btnSalvarReserva');
+    delete btn.dataset.inicio; delete btn.dataset.fim; delete btn.dataset.datas;
+  }
+  renderGrid();
+}
+document.getElementById('calPrev').onclick = () => navMes(-1);
+document.getElementById('calNext').onclick = () => navMes(1);
 
 document.getElementById('btnCopiarLink').onclick = () => {
   const link = 'https://'+document.getElementById('linkPublicoSpan').textContent;
