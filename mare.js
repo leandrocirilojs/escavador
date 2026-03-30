@@ -23,7 +23,7 @@ let datasOcupadas = new Set();
 let reservas      = [];
 let mesVis = new Date().getMonth(), anoVis = new Date().getFullYear();
 let pubMes = new Date().getMonth(), pubAno = new Date().getFullYear();
-let calMode = 'bloquear', rangeInicio = null;
+let calMode = 'bloquear', rangeInicio = null, rangeHover = null;
 let fotoBase64 = null, editandoId = null;
 let veioDeVitrine = false;
 
@@ -63,7 +63,7 @@ document.getElementById('btnLogoutHeader').onclick = () => signOut(auth);
 
 // ─── CAL MODE ──────────────────────────────────────────────────
 window.setCalMode = function(mode) {
-  calMode = mode; rangeInicio = null;
+  calMode = mode; rangeInicio = null; rangeHover = null;
   document.getElementById('tabBloquear').classList.toggle('active', mode==='bloquear');
   document.getElementById('tabReservar').classList.toggle('active', mode==='reservar');
   document.getElementById('reservaForm').style.display = mode==='reservar' ? 'block' : 'none';
@@ -400,9 +400,46 @@ function renderGrid() {
       if (r) el.dataset.tooltip = r.hospede;
     }
     else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
-    if (calMode==='reservar' && rangeInicio && dateStr===rangeInicio) el.classList.add('range-start');
+    // Highlight do range em preview
+    if (calMode==='reservar') {
+      const fimPreview = rangeHover || null;
+      if (rangeInicio) {
+        if (dateStr === rangeInicio) {
+          el.classList.add('range-start');
+        } else if (fimPreview && dateStr > rangeInicio && dateStr < fimPreview && !datasOcupadas.has(dateStr)) {
+          el.classList.add('range-middle');
+        } else if (fimPreview && dateStr === fimPreview && dateStr > rangeInicio) {
+          el.classList.add('range-end');
+        }
+      } else {
+        // período já confirmado — mostrar salvo
+        const btn = document.getElementById('btnSalvarReserva');
+        const inicio = btn.dataset.inicio, fim = btn.dataset.fim;
+        if (inicio && fim) {
+          if (dateStr === inicio) el.classList.add('range-start');
+          else if (dateStr > inicio && dateStr < fim && !datasOcupadas.has(dateStr)) el.classList.add('range-middle');
+          else if (dateStr === fim) el.classList.add('range-end');
+        }
+      }
+    }
     const naoClicavel = el.classList.contains('passado') || el.classList.contains('hoje');
-    if (!naoClicavel) el.onclick = () => handleDiaClick(dateStr);
+    if (!naoClicavel) {
+      el.onclick = () => handleDiaClick(dateStr);
+      if (calMode === 'reservar') {
+        el.addEventListener('mouseenter', () => { if (rangeInicio) { rangeHover = dateStr; renderGrid(); } });
+        el.addEventListener('mouseleave', () => { if (rangeInicio) { rangeHover = null; renderGrid(); } });
+        el.addEventListener('touchmove', (e) => {
+          const touch = e.touches[0];
+          const target = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (target && target.classList.contains('cal-day') && target.dataset.date) {
+            if (rangeInicio && target.dataset.date !== rangeHover) {
+              rangeHover = target.dataset.date; renderGrid();
+            }
+          }
+        }, {passive:true});
+      }
+    }
+    el.dataset.date = dateStr;
     if (el.dataset.tooltip) {
       el.addEventListener('mouseenter', showCalTooltip);
       el.addEventListener('mouseleave', hideCalTooltip);
@@ -446,11 +483,11 @@ async function handleDiaClick(dateStr) {
     } else {
       if (dateStr <= rangeInicio) { showToast('Saída deve ser após a entrada', true); rangeInicio=null; renderGrid(); return; }
       const datas = datasEntre(rangeInicio, dateStr);
-      if (datas.some(dt => datasOcupadas.has(dt))) { showToast('Período com datas ocupadas', true); rangeInicio=null; renderGrid(); return; }
+      if (datas.some(dt => datasOcupadas.has(dt))) { showToast('Período com datas ocupadas', true); rangeInicio=null; rangeHover=null; renderGrid(); return; }
       document.getElementById('rangeInfo').textContent = `${formatarData(rangeInicio)} → ${formatarData(dateStr)} (${datas.length} noite${datas.length>1?'s':''})`;
       const btn = document.getElementById('btnSalvarReserva');
       btn.dataset.inicio = rangeInicio; btn.dataset.fim = dateStr; btn.dataset.datas = JSON.stringify(datas);
-      rangeInicio = null; renderGrid();
+      rangeInicio = null; rangeHover = null; renderGrid();
     }
   }
 }
@@ -547,7 +584,7 @@ function navMes(delta) {
   if (mesVis > 11) { mesVis = 0; anoVis++; }
   // Se estava selecionando período, cancela para evitar período entre meses
   if (calMode === 'reservar' && rangeInicio) {
-    rangeInicio = null;
+    rangeInicio = null; rangeHover = null;
     document.getElementById('rangeInfo').textContent = 'Mês alterado — selecione a data de entrada';
     const btn = document.getElementById('btnSalvarReserva');
     delete btn.dataset.inicio; delete btn.dataset.fim; delete btn.dataset.datas;
