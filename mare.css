@@ -299,27 +299,60 @@ header { padding: 52px 0 28px; text-align: center; color: var(--white); }
 .tab.active { background: var(--white); color: var(--ocean); box-shadow: 0 2px 8px rgba(27,108,168,0.12); }
 
 /* ── VITRINE ── */
-.vitrine-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
-.vitrine-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(27,108,168,0.10); transition: transform 0.2s; }
-.vitrine-card:hover { transform: translateY(-3px); }
-.vitrine-card-img {
-  height: 180px;
+.vitrine-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 16px; }
+
+.vitrine-card { background: var(--white); border-radius: 16px; overflow: hidden; transition: transform 0.2s; cursor: pointer; }
+.vitrine-card:hover { transform: translateY(-2px); }
+
+/* Imagem */
+.vc-img-wrap {
+  position: relative; height: 220px; overflow: hidden; cursor: pointer;
   background: linear-gradient(160deg, var(--ocean-light), var(--ocean-deep));
-  position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
-.vitrine-card-img.casa { background: linear-gradient(160deg, #2D6A4F, #1B4332); }
-.vitrine-card-img.studio { background: linear-gradient(160deg, #6B4E9B, #3D2B6B); }
-.vitrine-card-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-.vitrine-card-img .img-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.18); }
-.vitrine-card-body { padding: 16px 18px 18px; }
-.vitrine-card-body h3 { font-family: 'Playfair Display', serif; font-size: 17px; margin-bottom: 3px; }
-.vitrine-card-body .vc-loc { font-size: 13px; color: var(--text-soft); display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
-.vitrine-card-body .vc-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-.vitrine-card-body .vc-tag { background: var(--foam); border-radius: 20px; padding: 4px 10px; font-size: 12px; color: var(--ocean); display: flex; align-items: center; gap: 4px; }
-.vitrine-card-body .vc-footer { display: flex; align-items: center; justify-content: space-between; }
-.vitrine-card-body .vc-preco { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ocean); }
-.vitrine-card-body .vc-preco span { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text-soft); font-weight: 400; }
-.vitrine-card-body .vc-btns { display: flex; gap: 8px; }
+.vc-img-wrap.casa   { background: linear-gradient(160deg, #2D6A4F, #1B4332); }
+.vc-img-wrap.studio { background: linear-gradient(160deg, #6B4E9B, #3D2B6B); }
+.vc-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
+.vc-icon-placeholder { font-size: 52px !important; opacity: 0.45; color: white; }
+
+/* Badge */
+.vc-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--white); color: var(--text);
+  font-size: 12px; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Coração / WhatsApp */
+.vc-heart {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(255,255,255,0.22); backdrop-filter: blur(6px);
+  border: none; border-radius: 50%; width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white; transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.vc-heart:hover { background: #25D366; transform: scale(1.1); }
+
+/* Body */
+.vc-body { padding: 14px 4px 4px; }
+.vc-top  { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2px; }
+.vc-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.vc-sub   { font-size: 13px; color: var(--text-soft); margin-bottom: 2px; }
+.vc-cidade { font-size: 13px; color: var(--text-soft); display: flex; align-items: center; gap: 3px; margin-bottom: 10px; }
+
+/* Preço + botão */
+.vc-price-row { display: flex; align-items: center; gap: 6px; }
+.vc-price      { font-size: 15px; font-weight: 700; color: var(--text); }
+.vc-price-unit { font-size: 13px; color: var(--text-soft); flex: 1; }
+.vc-ver-btn {
+  background: var(--ocean); color: var(--white);
+  border: none; border-radius: 10px; padding: 8px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: background 0.2s; white-space: nowrap;
+}
+.vc-ver-btn:hover { background: var(--ocean-deep); }
 .vitrine-header { text-align: center; padding: 8px 0 16px; color: var(--white); }
 .vitrine-header p { font-size: 13px; opacity: 0.75; margin-top: 6px; }
 .vitrine-search {
