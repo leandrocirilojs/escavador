@@ -23,6 +23,7 @@ let datasOcupadas = new Set();
 let reservas      = [];
 let mesVis = new Date().getMonth(), anoVis = new Date().getFullYear();
 let pubMes = new Date().getMonth(), pubAno = new Date().getFullYear();
+let pubRangeInicio = null, pubRangeFim = null;
 let calMode = 'bloquear', rangeInicio = null, rangeHover = null;
 let fotoBase64 = null, editandoId = null;
 let veioDeVitrine = false;
@@ -248,7 +249,7 @@ function limparModal() {
   document.getElementById('fotoPreview').style.display = 'none';
   document.getElementById('fotoUploadLabel').style.display = 'flex';
   document.getElementById('fotoInput').value = '';
-  ['modalNome','modalCidade','modalPreco','modalTel'].forEach(id => document.getElementById(id).value = '');
+  ['modalNome','modalCidade','modalPreco','modalTel','modalDescricao'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modalTipo').value = 'apto';
   document.getElementById('modalQuartos').value = '1';
 }
@@ -269,7 +270,8 @@ function abrirModalEditar(id, data) {
   document.getElementById('modalTipo').value    = data.tipo || 'apto';
   document.getElementById('modalQuartos').value = String(data.quartos || 1);
   document.getElementById('modalPreco').value   = data.preco || '';
-  document.getElementById('modalTel').value     = data.tel || '';
+  document.getElementById('modalTel').value        = data.tel || '';
+  document.getElementById('modalDescricao').value = data.descricao || '';
   if (data.foto) {
     document.getElementById('fotoPreview').src = data.foto;
     document.getElementById('fotoPreview').style.display = 'block';
@@ -317,11 +319,12 @@ document.getElementById('btnSalvarImovel').onclick = async () => {
   const tipo    = document.getElementById('modalTipo').value;
   const quartos = parseInt(document.getElementById('modalQuartos').value);
   const preco   = parseFloat(document.getElementById('modalPreco').value) || 0;
-  const tel     = document.getElementById('modalTel').value.trim();
+  const tel        = document.getElementById('modalTel').value.trim();
+  const descricao  = document.getElementById('modalDescricao').value.trim();
   if (!nome || !cidade || !tel) { showToast('Preencha nome, cidade e WhatsApp', true); return; }
   setBtn('btnSalvarImovel', true);
   try {
-    const payload = { nome, cidade, tipo, quartos, preco, tel, foto: fotoBase64||null };
+    const payload = { nome, cidade, tipo, quartos, preco, tel, descricao: descricao||'', foto: fotoBase64||null };
     if (editandoId) {
       await updateDoc(doc(db,'imoveis',editandoId), payload);
       showToast('Imóvel atualizado!');
@@ -611,10 +614,7 @@ async function abrirPublico(mostrarVoltar=false) {
   document.getElementById('pubTags').innerHTML = `
     <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">bed</span> ${d.quartos} quarto${d.quartos>1?'s':''}</span>
     <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">${d.tipo==='casa'?'cottage':'apartment'}</span> ${d.tipo==='casa'?'Casa':d.tipo==='studio'?'Studio':'Apartamento'}</span>`;
-  document.getElementById('btnWhatsapp').onclick = () => {
-    const msg = encodeURIComponent(`Olá! Vi o imóvel "${d.nome}" no Maré e tenho interesse.`);
-    window.open(`https://wa.me/55${d.tel}?text=${msg}`, '_blank');
-  };
+  // onclick do WhatsApp gerenciado por atualizarBtnWpp()
   // Avatar do proprietário na página pública
   try {
     const userSnap = await getDoc(doc(db,'usuarios', imovelAtual.data.uid || ''));
@@ -628,6 +628,23 @@ async function abrirPublico(mostrarVoltar=false) {
       pubOwner.style.display = 'flex';
     }
   } catch {}
+  // Descrição
+  const descCard = document.getElementById('pubDescricaoCard');
+  const descEl   = document.getElementById('pubDescricao');
+  if (d.descricao) {
+    descEl.textContent = d.descricao;
+    descCard.style.display = 'block';
+  } else {
+    descCard.style.display = 'none';
+  }
+  // Resetar seleção de período público
+  pubRangeInicio = null; pubRangeFim = null;
+  atualizarPeriodoPub();
+  document.getElementById('btnLimparPeriodo').onclick = () => {
+    pubRangeInicio = null; pubRangeFim = null;
+    atualizarPeriodoPub();
+    renderGridPublico();
+  };
   // Botão voltar visível só se veio da vitrine
   document.getElementById('btnVoltarVitrine').style.display = mostrarVoltar ? 'inline-flex' : 'none';
   await carregarDadosCalendario();
@@ -647,10 +664,83 @@ function renderGridPublico() {
   for (let i=0; i<primeiro; i++) { const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
   for (let d=1; d<=totalDias; d++) {
     const dateStr = `${pubAno}-${String(pubMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const el = document.createElement('div'); el.className='cal-day'; el.textContent=d; el.style.cursor='default';
-    if (dateStr===hojeStr) el.classList.add('hoje');
-    else if (datasOcupadas.has(dateStr)) el.classList.add('ocupado');
+    const dataObj = new Date(pubAno, pubMes, d);
+    const el = document.createElement('div'); el.className='cal-day'; el.textContent=d;
+    if (dateStr===hojeStr) { el.classList.add('hoje'); el.style.cursor='default'; }
+    else if (dataObj < hoje) { el.classList.add('passado'); el.style.cursor='default'; }
+    else if (datasOcupadas.has(dateStr)) { el.classList.add('ocupado'); el.style.cursor='default'; }
+    else {
+      el.style.cursor='pointer';
+      // Highlight do range público
+      if (pubRangeInicio && pubRangeFim) {
+        if (dateStr === pubRangeInicio) el.classList.add('range-start');
+        else if (dateStr > pubRangeInicio && dateStr < pubRangeFim) el.classList.add('range-middle');
+        else if (dateStr === pubRangeFim) el.classList.add('range-end');
+      } else if (pubRangeInicio && dateStr === pubRangeInicio) {
+        el.classList.add('range-start');
+      }
+      el.onclick = () => {
+        if (!pubRangeInicio || (pubRangeInicio && pubRangeFim)) {
+          pubRangeInicio = dateStr; pubRangeFim = null;
+        } else {
+          if (dateStr <= pubRangeInicio) { pubRangeInicio = dateStr; pubRangeFim = null; }
+          else {
+            const datas = datasEntre(pubRangeInicio, dateStr);
+            if (datas.some(dt => datasOcupadas.has(dt))) {
+              showToast('Período com datas indisponíveis', true);
+              pubRangeInicio = null; pubRangeFim = null;
+            } else {
+              pubRangeFim = dateStr;
+            }
+          }
+        }
+        atualizarPeriodoPub();
+        renderGridPublico();
+      };
+    }
     grid.appendChild(el);
+  }
+}
+
+function atualizarPeriodoPub() {
+  const periodoEl = document.getElementById('pubPeriodo');
+  const datasEl   = document.getElementById('pubPeriodoDatas');
+  const totalEl   = document.getElementById('pubPeriodoTotal');
+  if (!pubRangeInicio) { periodoEl.style.display = 'none'; atualizarBtnWpp(); return; }
+  periodoEl.style.display = 'block';
+  if (!pubRangeFim) {
+    datasEl.textContent = `Entrada: ${formatarData(pubRangeInicio)} — selecione a saída`;
+    totalEl.textContent = '';
+  } else {
+    const noites = datasEntre(pubRangeInicio, pubRangeFim).length;
+    const preco  = imovelAtual?.data?.preco || 0;
+    const total  = preco * noites;
+    datasEl.textContent = `${formatarData(pubRangeInicio)} → ${formatarData(pubRangeFim)}`;
+    totalEl.textContent = `${noites} noite${noites>1?'s':''} · Total estimado: R$ ${total.toLocaleString('pt-BR')}`;
+  }
+  atualizarBtnWpp();
+}
+
+function atualizarBtnWpp() {
+  const d = imovelAtual?.data;
+  if (!d) return;
+  const btn = document.getElementById('btnWhatsapp');
+  if (pubRangeInicio && pubRangeFim) {
+    const noites = datasEntre(pubRangeInicio, pubRangeFim).length;
+    const total  = (d.preco||0) * noites;
+    btn.onclick = () => {
+      const msg = encodeURIComponent(
+        `Olá! Vi o imóvel "${d.nome}" no Maré e tenho interesse.\n` +
+        `Período: ${formatarData(pubRangeInicio)} a ${formatarData(pubRangeFim)} (${noites} noite${noites>1?'s':''})\n` +
+        `Total estimado: R$ ${total.toLocaleString('pt-BR')}`
+      );
+      window.open(`https://wa.me/55${d.tel}?text=${msg}`, '_blank');
+    };
+  } else {
+    btn.onclick = () => {
+      const msg = encodeURIComponent(`Olá! Vi o imóvel "${d.nome}" no Maré e tenho interesse.`);
+      window.open(`https://wa.me/55${d.tel}?text=${msg}`, '_blank');
+    };
   }
 }
 
