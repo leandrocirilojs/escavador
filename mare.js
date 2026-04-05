@@ -252,6 +252,9 @@ function limparModal() {
   ['modalNome','modalCidade','modalPreco','modalTel','modalDescricao'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modalTipo').value = 'apto';
   document.getElementById('modalQuartos').value = '1';
+  ['regraPets','regraFumar','regraFestas','regraCriancas'].forEach(id => document.getElementById(id).checked = false);
+  document.getElementById('modalCheckin').value = '';
+  document.getElementById('modalCheckout').value = '';
 }
 
 function abrirModalNovo() {
@@ -272,6 +275,12 @@ function abrirModalEditar(id, data) {
   document.getElementById('modalPreco').value   = data.preco || '';
   document.getElementById('modalTel').value        = data.tel || '';
   document.getElementById('modalDescricao').value = data.descricao || '';
+  document.getElementById('regraPets').checked     = !!(data.regras?.pets);
+  document.getElementById('regraFumar').checked    = !!(data.regras?.semFumar);
+  document.getElementById('regraFestas').checked   = !!(data.regras?.festas);
+  document.getElementById('regraCriancas').checked = !!(data.regras?.criancas);
+  document.getElementById('modalCheckin').value    = data.checkin  || '';
+  document.getElementById('modalCheckout').value   = data.checkout || '';
   if (data.foto) {
     document.getElementById('fotoPreview').src = data.foto;
     document.getElementById('fotoPreview').style.display = 'block';
@@ -321,10 +330,18 @@ document.getElementById('btnSalvarImovel').onclick = async () => {
   const preco   = parseFloat(document.getElementById('modalPreco').value) || 0;
   const tel        = document.getElementById('modalTel').value.trim();
   const descricao  = document.getElementById('modalDescricao').value.trim();
+  const checkin    = document.getElementById('modalCheckin').value;
+  const checkout   = document.getElementById('modalCheckout').value;
+  const regras = {
+    pets:      document.getElementById('regraPets').checked,
+    semFumar:  document.getElementById('regraFumar').checked,
+    festas:    document.getElementById('regraFestas').checked,
+    criancas:  document.getElementById('regraCriancas').checked,
+  };
   if (!nome || !cidade || !tel) { showToast('Preencha nome, cidade e WhatsApp', true); return; }
   setBtn('btnSalvarImovel', true);
   try {
-    const payload = { nome, cidade, tipo, quartos, preco, tel, descricao: descricao||'', foto: fotoBase64||null };
+    const payload = { nome, cidade, tipo, quartos, preco, tel, descricao: descricao||'', checkin: checkin||'', checkout: checkout||'', regras, foto: fotoBase64||null };
     if (editandoId) {
       await updateDoc(doc(db,'imoveis',editandoId), payload);
       showToast('Imóvel atualizado!');
@@ -609,11 +626,25 @@ async function abrirPublico(mostrarVoltar=false) {
   document.getElementById('pubNome').textContent   = d.nome;
   document.getElementById('pubCidade').textContent = d.cidade;
   document.getElementById('pubPreco').textContent  = d.preco ? `R$ ${d.preco.toLocaleString('pt-BR')}` : '—';
-  const fotoHero = document.getElementById('pubFotoHero');
-  if (d.foto) { fotoHero.src = d.foto; fotoHero.style.display='block'; } else fotoHero.style.display='none';
-  document.getElementById('pubTags').innerHTML = `
-    <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">bed</span> ${d.quartos} quarto${d.quartos>1?'s':''}</span>
-    <span class="pub-tag"><span class="material-icons-round" style="font-size:13px">${d.tipo==='casa'?'cottage':'apartment'}</span> ${d.tipo==='casa'?'Casa':d.tipo==='studio'?'Studio':'Apartamento'}</span>`;
+
+  // Galeria
+  const galeriaImg = document.getElementById('pubGaleriaImg');
+  if (d.foto) {
+    galeriaImg.innerHTML = `<img src="${d.foto}" alt="${d.nome}">`;
+  } else {
+    const classeG = d.tipo==='casa' ? 'casa' : d.tipo==='studio' ? 'studio' : '';
+    const iconeG  = d.tipo==='casa' ? 'cottage' : d.tipo==='studio' ? 'meeting_room' : 'apartment';
+    galeriaImg.className = `pub-galeria-img ${classeG}`;
+    galeriaImg.innerHTML = `<span class="material-icons-round" style="font-size:52px;opacity:0.35;color:white">${iconeG}</span>`;
+  }
+
+  // Detalhes estilo Airbnb
+  const tipo = d.tipo==='casa' ? 'Casa' : d.tipo==='studio' ? 'Studio' : 'Apartamento';
+  const icTipo = d.tipo==='casa' ? 'cottage' : d.tipo==='studio' ? 'meeting_room' : 'apartment';
+  document.getElementById('pubDetalhes').innerHTML = `
+    <div class="pub-detalhe"><span class="material-icons-round">bed</span><div><strong>${d.quartos} quarto${d.quartos>1?'s':''}</strong><span>para sua estadia</span></div></div>
+    <div class="pub-detalhe"><span class="material-icons-round">${icTipo}</span><div><strong>${tipo}</strong><span>tipo de imóvel</span></div></div>
+    <div class="pub-detalhe"><span class="material-icons-round">place</span><div><strong>${d.cidade}</strong><span>localização</span></div></div>`;
   // onclick do WhatsApp gerenciado por atualizarBtnWpp()
   // Avatar do proprietário na página pública
   try {
@@ -631,11 +662,14 @@ async function abrirPublico(mostrarVoltar=false) {
   // Descrição
   const descCard = document.getElementById('pubDescricaoCard');
   const descEl   = document.getElementById('pubDescricao');
+  const descSep = document.getElementById('pubDescSep');
   if (d.descricao) {
     descEl.textContent = d.descricao;
     descCard.style.display = 'block';
+    if (descSep) descSep.style.display = 'block';
   } else {
     descCard.style.display = 'none';
+    if (descSep) descSep.style.display = 'none';
   }
   // Resetar seleção de período público
   pubRangeInicio = null; pubRangeFim = null;
@@ -645,6 +679,42 @@ async function abrirPublico(mostrarVoltar=false) {
     atualizarPeriodoPub();
     renderGridPublico();
   };
+  // Regras da casa
+  const regrasCard = document.getElementById('pubRegrasCard');
+  const regrasGrid = document.getElementById('pubRegrasGrid');
+  const checkinRow = document.getElementById('pubCheckinRow');
+  const todasRegras = [
+    { key:'pets',     icon:'pets',          label:'Aceita pets',      negLabel:'Sem pets'         },
+    { key:'semFumar', icon:'smoke_free',    label:'Não é permitido fumar', negLabel:'Permitido fumar' },
+    { key:'festas',   icon:'celebration',   label:'Permite festas',   negLabel:'Sem festas'       },
+    { key:'criancas', icon:'child_friendly',label:'Aceita crianças',  negLabel:'Sem crianças'     },
+  ];
+  const regras = d.regras || {};
+  const temRegra = Object.values(regras).some(v => v);
+  const temCheckin = d.checkin || d.checkout;
+  if (temRegra || temCheckin) {
+    regrasGrid.innerHTML = '';
+    todasRegras.forEach(r => {
+      if (regras[r.key] !== undefined) {
+        const ok = regras[r.key];
+        const item = document.createElement('div');
+        item.className = `pub-regra-item ${ok ? 'ok' : 'nok'}`;
+        item.innerHTML = `<span class="material-icons-round">${ok ? r.icon : 'block'}</span><span>${ok ? r.label : r.negLabel}</span>`;
+        regrasGrid.appendChild(item);
+      }
+    });
+    if (temCheckin) {
+      document.getElementById('pubCheckinHora').textContent  = d.checkin  || '—';
+      document.getElementById('pubCheckoutHora').textContent = d.checkout || '—';
+      checkinRow.style.display = 'flex';
+    } else {
+      checkinRow.style.display = 'none';
+    }
+    regrasCard.style.display = 'block';
+  } else {
+    regrasCard.style.display = 'none';
+  }
+
   // Botão voltar visível só se veio da vitrine
   document.getElementById('btnVoltarVitrine').style.display = mostrarVoltar ? 'inline-flex' : 'none';
   await carregarDadosCalendario();
@@ -837,14 +907,32 @@ async function carregarVitrine() {
       });
     }
 
+    let filtroTipo = '';
+    let filtroTexto = '';
+
+    function aplicarFiltros() {
+      renderVitrine(imoveis.filter(d => {
+        const textoOk = !filtroTexto || d.nome.toLowerCase().includes(filtroTexto) || d.cidade.toLowerCase().includes(filtroTexto);
+        const tipoOk  = !filtroTipo  || d.tipo === filtroTipo;
+        return textoOk && tipoOk;
+      }));
+    }
+
     renderVitrine(imoveis);
 
     document.getElementById('vitrineSearch').oninput = (e) => {
-      const q = e.target.value.toLowerCase();
-      renderVitrine(imoveis.filter(d =>
-        d.nome.toLowerCase().includes(q) || d.cidade.toLowerCase().includes(q)
-      ));
+      filtroTexto = e.target.value.toLowerCase();
+      aplicarFiltros();
     };
+
+    document.querySelectorAll('.vf-chip').forEach(chip => {
+      chip.onclick = () => {
+        document.querySelectorAll('.vf-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        filtroTipo = chip.dataset.tipo;
+        aplicarFiltros();
+      };
+    });
   } catch(e) {
     grid.innerHTML = `<p style="color:var(--coral);font-size:14px;padding:8px">Erro ao carregar: ${e.message}</p>`;
   }
